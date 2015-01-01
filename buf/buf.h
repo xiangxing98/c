@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2015, Chao Wang (hit9 <hit9icloud.com>)
+ * Copyright (c) 2015, Chao Wang (hit9 <hit9@icloud.com>)
  *
  * Permission to use, copy, modify, and distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -19,6 +19,9 @@
 #ifndef __BUF_H
 #define __BUF_H
 
+#include <stddef.h>
+#include <stdint.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -34,7 +37,7 @@ typedef struct buf_st {
     uint8_t *data;      /* real data */
     size_t size;        /* real data size */
     size_t cap;         /* buf cap */
-    size_t uint;        /* reallocation unit size */
+    size_t unit;        /* reallocation unit size */
 } buf_t;
 
 
@@ -42,7 +45,8 @@ buf_t *buf_new(size_t);
 void buf_free(buf_t *);
 int buf_grow(buf_t *, size_t);
 char *buf_str(buf_t *);
-
+void buf_print(buf_t *);
+int buf_put(buf_t *, uint8_t *, size_t);
 
 #ifdef __cplusplus
 }
