@@ -2,4 +2,5 @@
 .*.swo
 *.o
 *.log
+*.dSYM
 buf/buf

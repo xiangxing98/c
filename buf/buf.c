@@ -94,17 +94,23 @@ buf_grow(buf_t *buf, size_t size)
 }
 
 /**
- * Get a copy of buf data as NULL-Termination string
+ * Get data as c string (terminate with '\0')
  */
 char *
 buf_str(buf_t *buf)
 {
     assert(buf && buf->unit);
 
-    char *str = malloc((buf->size) * sizeof(char));
-    memcpy(str, buf->data, buf->size);
-    str[buf->size] = '\0';
-    return str;
+    if (buf->size < buf->cap && buf->data[buf->size] == '\0')
+        return (char *)buf->data;
+
+    if (buf->size + 1 <= buf->cap ||
+            buf_grow(buf, buf->size + 1) == BUF_OK) {
+        buf->data[buf->size] = '\0';
+        return (char *)buf->data;
+    }
+
+    return NULL;
 }
 
 /**
@@ -115,7 +121,7 @@ buf_putc(buf_t *buf, char ch)
 {
     int res = buf_grow(buf, buf->size + 1);
 
-    if (res < 0)
+    if (res != BUF_OK)
         return res;
 
     buf->data[buf->size] = ch;
@@ -140,7 +146,7 @@ buf_put(buf_t *buf, uint8_t *data, size_t size)
 {
     int res = buf_grow(buf, buf->size + size);
 
-    if (res < 0)
+    if (res != BUF_OK)
         return res;
 
     memcpy(buf->data + buf->size, data, size);
@@ -154,7 +160,7 @@ buf_put(buf_t *buf, uint8_t *data, size_t size)
 int
 buf_puts(buf_t *buf, char *str)
 {
-    return buf_put(buf, str, strlen(str));
+    return buf_put(buf, (uint8_t *)str, strlen(str));
 }
 
 
