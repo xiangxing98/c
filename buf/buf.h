@@ -43,10 +43,12 @@ typedef struct buf_st {
 
 buf_t *buf_new(size_t);
 void buf_free(buf_t *);
+void buf_clear(buf_t *);
 int buf_grow(buf_t *, size_t);
 char *buf_str(buf_t *);
 void buf_print(buf_t *);
 int buf_put(buf_t *, uint8_t *, size_t);
+int buf_puts(buf_t *, char *);
 
 #ifdef __cplusplus
 }

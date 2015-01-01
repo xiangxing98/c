@@ -51,6 +51,20 @@ buf_free(buf_t *buf)
         free(buf);
 }
 
+
+/**
+ * Free buf data
+ */
+void
+buf_clear(buf_t *buf)
+{
+    if (buf->data != NULL)
+        free(buf->data);
+    buf->data = NULL;
+    buf->size = 0;
+    buf->cap = 0;
+}
+
 /**
  * Increase buf allocated size to `size`
  */
