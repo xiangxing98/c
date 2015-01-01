@@ -19,7 +19,6 @@
 #ifndef __BUF_H
 #define __BUF_H
 
-#include <stddef.h>
 #include <stdint.h>
 
 #ifdef __cplusplus
