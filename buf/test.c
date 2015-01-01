@@ -14,6 +14,8 @@ int main(int argc, const char *argv[])
     buf_putc(buf, 'c');
     buf_puts(buf, "hello");
     buf_print(buf);
+    buf_rrm(buf, 2);
+    buf_print(buf);
     buf_free(buf);
     return 0;
 }

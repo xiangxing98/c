@@ -157,3 +157,37 @@ buf_puts(buf_t *buf, char *str)
 {
     return buf_put(buf, str, strlen(str));
 }
+
+
+/**
+ * Remove left data from buf by number of bytes
+ */
+void
+buf_lrm(buf_t *buf, size_t size)
+{
+    assert(buf != NULL && buf->unit != 0);
+
+    if (size > buf->size) {
+        buf->size = 0;
+        return;
+    }
+
+    buf->size -= size;
+    memmove(buf->data, buf->data + size, buf->size);
+}
+
+
+/**
+ * Remove right data from buf by number of bytes
+ */
+void
+buf_rrm(buf_t *buf, size_t size)
+{
+    assert(buf != NULL && buf->unit != 0);
+
+    if (size > buf->size) {
+        buf->size = 0;
+        return;
+    }
+    buf->size -= size;
+}

@@ -49,6 +49,8 @@ char *buf_str(buf_t *);
 void buf_print(buf_t *);
 int buf_put(buf_t *, uint8_t *, size_t);
 int buf_puts(buf_t *, char *);
+void buf_lrm(buf_t *, size_t);
+void buf_rrm(buf_t *, size_t);
 
 #ifdef __cplusplus
 }
