@@ -2,9 +2,10 @@ NAME = buf
 CC = cc
 INC = ./
 SRC = ./buf.c ./test.c
+OBJ = $(SRC:c=o)
 
-$(NAME):
-	$(CC) $(SRC) -o $(NAME) -g -I$(INC)
+$(NAME): $(OBJ)
+	$(CC) $(OBJ) -g -o $(NAME) -I$(INC)
 
 clean:
 	rm -rf *.o $(NAME)
