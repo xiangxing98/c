@@ -19,7 +19,11 @@
 #ifndef __BUF_H
 #define __BUF_H
 
+#include <assert.h>
 #include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 #ifdef __cplusplus
 extern "C" {
