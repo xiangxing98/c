@@ -4,3 +4,4 @@
 *.log
 *.dSYM
 buf/buf
+stack/stack
