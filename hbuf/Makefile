@@ -1,4 +1,4 @@
-NAME = buf
+NAME = hbuf
 CC = cc
 INC = ./
 SRC = ./$(NAME).c ./test.c
