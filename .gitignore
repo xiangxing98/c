@@ -3,5 +3,5 @@
 *.o
 *.log
 *.dSYM
-buf/buf
-stack/stack
+hbuf/hbuf
+hstack/hstack
