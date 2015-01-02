@@ -107,7 +107,11 @@ hstack_pop(hstack_t *stack)
 void *
 hstack_top(hstack_t *stack)
 {
+
+    assert(stack != NULL);
+
     if (stack->size == 0 || stack->data == NULL)
         return NULL;
+
     return stack->data[stack->size - 1];
 }
