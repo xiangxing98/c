@@ -26,8 +26,9 @@ hstack_new(size_t size)
         stack->data = NULL;
         stack->size = 0;
         stack->cap = 0;
-        if (size > 0)
-            hstack_grow(stack, size);
+        if (size > 0 &&
+                hstack_grow(stack, size) != HSTACK_OK)
+            return NULL;
     }
     return stack;
 }
