@@ -1,4 +1,4 @@
-NAME = stack
+NAME = hstack
 CC = cc
 INC = ./
 SRC = ./$(NAME).c ./test.c

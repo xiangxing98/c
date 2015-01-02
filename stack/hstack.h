@@ -29,21 +29,21 @@ extern "C" {
 typedef enum {
     STACK_OK = 0,
     STACK_ENOMEM = -1,
-} stack_error_t;
+} hstack_error_t;
 
-typedef struct stack_st {
+typedef struct hstack_st {
     void **data;
     size_t size;
     size_t cap;
-} stack_t;
+} hstack_t;
 
-stack_t *stack_new(size_t);
-void stack_free(stack_t *);
-void stack_clear(stack_t *);
-int stack_grow(stack_t *, size_t);
-int stack_push(stack_t *, void *);
-void *stack_pop(stack_t *);
-void *stack_top(stack_t *);
+hstack_t *hstack_new(size_t);
+void hstack_free(hstack_t *);
+void hstack_clear(hstack_t *);
+int hstack_grow(hstack_t *, size_t);
+int hstack_push(hstack_t *, void *);
+void *hstack_pop(hstack_t *);
+void *hstack_top(hstack_t *);
 
 #ifdef __cplusplus
 }

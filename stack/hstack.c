@@ -15,25 +15,25 @@
  */
 
 
-#include "stack.h"
+#include "hstack.h"
 
-stack_t *
-stack_new(size_t size)
+hstack_t *
+hstack_new(size_t size)
 {
-    stack_t *stack = malloc(sizeof(stack_t));
+    hstack_t *stack = malloc(sizeof(hstack_t));
 
     if (stack != NULL) {
         stack->data = NULL;
         stack->size = 0;
         stack->cap = 0;
         if (size > 0)
-            stack_grow(stack, size);
+            hstack_grow(stack, size);
     }
     return stack;
 }
 
 void
-stack_free(stack_t *stack)
+hstack_free(hstack_t *stack)
 {
     if (stack->data != NULL)
         free(stack->data);
@@ -42,7 +42,7 @@ stack_free(stack_t *stack)
 }
 
 void
-stack_clear(stack_t *stack)
+hstack_clear(hstack_t *stack)
 {
     assert(stack != NULL);
 
@@ -54,7 +54,7 @@ stack_clear(stack_t *stack)
 }
 
 int
-stack_grow(stack_t *stack, size_t size)
+hstack_grow(hstack_t *stack, size_t size)
 {
     assert(stack != NULL);
 
@@ -79,12 +79,12 @@ stack_grow(stack_t *stack, size_t size)
 }
 
 int
-stack_push(stack_t *stack, void *item)
+hstack_push(hstack_t *stack, void *item)
 {
     assert(stack != NULL);
 
     if (stack->size == stack->cap &&
-            stack_grow(stack, stack->size + 1) != STACK_OK)
+            hstack_grow(stack, stack->size + 1) != STACK_OK)
         return STACK_ENOMEM;
 
     stack->data[stack->size++] = item;
@@ -92,7 +92,7 @@ stack_push(stack_t *stack, void *item)
 }
 
 void *
-stack_pop(stack_t *stack)
+hstack_pop(hstack_t *stack)
 {
     assert(stack != NULL);
 
@@ -104,7 +104,7 @@ stack_pop(stack_t *stack)
 
 
 void *
-stack_top(stack_t *stack)
+hstack_top(hstack_t *stack)
 {
     if (stack->size == 0 || stack->data == NULL)
         return NULL;
