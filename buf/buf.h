@@ -1,5 +1,4 @@
 /**
- *
  * Copyright (c) 2015, Chao Wang (hit9 <hit9@icloud.com>)
  *
  * Permission to use, copy, modify, and distribute this software for any

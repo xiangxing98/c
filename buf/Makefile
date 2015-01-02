@@ -1,7 +1,7 @@
 NAME = buf
 CC = cc
 INC = ./
-SRC = ./buf.c ./test.c
+SRC = ./$(NAME).c ./test.c
 OBJ = $(SRC:c=o)
 
 $(NAME): $(OBJ)

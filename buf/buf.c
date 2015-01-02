@@ -53,6 +53,8 @@ buf_free(buf_t *buf)
 void
 buf_clear(buf_t *buf)
 {
+    assert(buf != NULL);
+
     if (buf->data != NULL)
         free(buf->data);
     buf->data = NULL;
