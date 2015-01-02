@@ -47,7 +47,7 @@ hstack_clear(hstack_t *stack)
 {
     assert(stack != NULL);
 
-    if (stack->data)
+    if (stack->data != NULL)
         free(stack->data);
     stack->data = NULL;
     stack->size = 0;
