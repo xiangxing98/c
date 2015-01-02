@@ -14,8 +14,8 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-#ifndef __STACK_H
-#define __STACK_H
+#ifndef __HSTACK_H
+#define __HSTACK_H
 
 #include <assert.h>
 #include <stdlib.h>
@@ -24,11 +24,11 @@
 extern "C" {
 #endif
 
-#define STACK_MAX_SIZE 16 * 1024 * 1024  //16mb
+#define HSTACK_MAX_SIZE 16 * 1024 * 1024  //16mb
 
 typedef enum {
-    STACK_OK = 0,
-    STACK_ENOMEM = -1,
+    HSTACK_OK = 0,
+    HSTACK_ENOMEM = -1,
 } hstack_error_t;
 
 typedef struct hstack_st {

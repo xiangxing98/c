@@ -58,24 +58,24 @@ hstack_grow(hstack_t *stack, size_t size)
 {
     assert(stack != NULL);
 
-    if (size > STACK_MAX_SIZE)
-        return STACK_ENOMEM;
+    if (size > HSTACK_MAX_SIZE)
+        return HSTACK_ENOMEM;
 
     if (size <= stack->cap)
-        return STACK_OK;
+        return HSTACK_OK;
 
     void **data = realloc(stack->data,
             size * sizeof(void *));
 
     if (data == NULL)
-        return STACK_ENOMEM;
+        return HSTACK_ENOMEM;
 
     stack->data = data;
     stack->cap = size;
 
     if (stack->size > size)
         stack->size = size;
-    return STACK_OK;
+    return HSTACK_OK;
 }
 
 int
@@ -84,11 +84,11 @@ hstack_push(hstack_t *stack, void *item)
     assert(stack != NULL);
 
     if (stack->size == stack->cap &&
-            hstack_grow(stack, stack->size + 1) != STACK_OK)
-        return STACK_ENOMEM;
+            hstack_grow(stack, stack->size + 1) != HSTACK_OK)
+        return HSTACK_ENOMEM;
 
     stack->data[stack->size++] = item;
-    return STACK_OK;
+    return HSTACK_OK;
 }
 
 void *

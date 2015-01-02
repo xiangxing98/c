@@ -70,7 +70,7 @@ void
 case_hstack_grow()
 {
     hstack_t *stack = hstack_new(10);
-    assert(hstack_grow(stack, 20) == STACK_OK);
+    assert(hstack_grow(stack, 20) == HSTACK_OK);
     assert(stack->data != NULL && stack->size == 0
             && stack->cap == 20);
     hstack_free(stack);
@@ -82,8 +82,8 @@ case_hstack_push()
     hstack_t *stack = hstack_new(0);
     char *s1 = "s1";
     char *s2 = "s2";
-    assert(hstack_push(stack, (void *)s1) == STACK_OK);
-    assert(hstack_push(stack, (void *)s2) == STACK_OK);
+    assert(hstack_push(stack, (void *)s1) == HSTACK_OK);
+    assert(hstack_push(stack, (void *)s2) == HSTACK_OK);
     assert(stack->size == 2 && stack->cap == 2);
     assert(hstack_top(stack) == s2);
     assert(hstack_pop(stack) == s2);
@@ -98,8 +98,8 @@ case_hstack_pop()
     hstack_t *stack = hstack_new(8);
     char *s1 = "s1";
     char *s2 = "s2";
-    assert(hstack_push(stack, (void *)s1) == STACK_OK);
-    assert(hstack_push(stack, (void *)s2) == STACK_OK);
+    assert(hstack_push(stack, (void *)s1) == HSTACK_OK);
+    assert(hstack_push(stack, (void *)s2) == HSTACK_OK);
     assert(stack->size == 2 && stack->cap == 8);
     assert(hstack_pop(stack) == s2);
     assert(hstack_pop(stack) == s1);
@@ -113,8 +113,8 @@ case_hstack_top()
     hstack_t *stack = hstack_new(8);
     char *s1 = "s1";
     char *s2 = "s2";
-    assert(hstack_push(stack, (void *)s1) == STACK_OK);
-    assert(hstack_push(stack, (void *)s2) == STACK_OK);
+    assert(hstack_push(stack, (void *)s1) == HSTACK_OK);
+    assert(hstack_push(stack, (void *)s2) == HSTACK_OK);
     assert(hstack_top(stack) == s2);
     assert(hstack_pop(stack) == s2);
     assert(hstack_top(stack) == s1);
