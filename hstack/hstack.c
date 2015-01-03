@@ -17,6 +17,9 @@
 
 #include "hstack.h"
 
+/**
+ * New stack.
+ */
 hstack_t *
 hstack_new(size_t size)
 {
@@ -33,6 +36,9 @@ hstack_new(size_t size)
     return stack;
 }
 
+/**
+ * Free stack.
+ */
 void
 hstack_free(hstack_t *stack)
 {
@@ -42,6 +48,9 @@ hstack_free(hstack_t *stack)
         free(stack);
 }
 
+/**
+ * Clear stack, O(1)
+ */
 void
 hstack_clear(hstack_t *stack)
 {
@@ -54,6 +63,9 @@ hstack_clear(hstack_t *stack)
     stack->cap = 0;
 }
 
+/**
+ * Grow stack allocation memory to given size, O(n)
+ */
 int
 hstack_grow(hstack_t *stack, size_t size)
 {
@@ -79,6 +91,9 @@ hstack_grow(hstack_t *stack, size_t size)
     return HSTACK_OK;
 }
 
+/**
+ * Push an item into stack, O(1)~O(n).
+ */
 int
 hstack_push(hstack_t *stack, void *item)
 {
@@ -92,6 +107,9 @@ hstack_push(hstack_t *stack, void *item)
     return HSTACK_OK;
 }
 
+/**
+ * Pop an item from stack, O(1)
+ */
 void *
 hstack_pop(hstack_t *stack)
 {
@@ -103,6 +121,9 @@ hstack_pop(hstack_t *stack)
     return stack->data[--stack->size];
 }
 
+/**
+ * Get the top item in stack, O(1).
+ */
 void *
 hstack_top(hstack_t *stack)
 {
