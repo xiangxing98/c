@@ -37,6 +37,7 @@ int main(int argc, const char *argv[])
     test_case("hlist_last", &case_hlist_last);
     test_case("hlist_get", &case_hlist_get);
     test_case("hlist_set", &case_hlist_set);
+    test_case("hlist_det", &case_hlist_del);
     return 0;
 }
 
@@ -210,5 +211,26 @@ case_hlist_set()
     assert(hlist_rpush(list, (void *)s3) == HLIST_OK);
     assert(hlist_set(list, 0, (void *)s4) == HLIST_OK);
     assert(hlist_get(list, 0) == (void *)s4);
+    hlist_free(list);
+}
+
+void
+case_hlist_del()
+{
+    hlist_t *list = hlist_new();
+    assert(hlist_del(list, 1) == HLIST_EINDEX);
+    char *s1 = "s", *s2 = "s2", *s3 = "s3";
+    assert(hlist_rpush(list, (void *)s1) == HLIST_OK);
+    assert(hlist_rpush(list, (void *)s2) == HLIST_OK);
+    assert(hlist_rpush(list, (void *)s3) == HLIST_OK);
+    assert(hlist_del(list, 0) == HLIST_OK);
+    assert(list->size == 2);
+    assert(hlist_first(list) == (void *)s2);
+    assert(hlist_del(list, 3) == HLIST_EINDEX);
+    assert(hlist_del(list, 0) == HLIST_OK);
+    assert(list->size == 1);
+    assert(hlist_del(list, 0) == HLIST_OK);
+    assert(list->size == 0);
+    assert(hlist_last(list) == NULL && hlist_first(list) == NULL);
     hlist_free(list);
 }

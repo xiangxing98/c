@@ -316,8 +316,15 @@ hlist_del(hlist_t *list, size_t index)
         if (idx++ == index) {
             prev = node->prev;
             next = node->next;
-            prev->next = next;
-            next->prev = prev;
+            if (prev != NULL)
+                prev->next = next;
+            else
+                list->head = next;
+            if (next != NULL)
+                next->prev = prev;
+            else
+                list->tail = prev;
+            list->size -= 1;
             hlist_node_free(node);
             return HLIST_OK;
         }
