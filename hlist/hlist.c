@@ -99,7 +99,10 @@ hlist_lpush(hlist_t *list, void *item)
         list->tail = node;
     } else {
         assert(list->head != NULL && list->tail != NULL);
-        list->head->prev = node;
+        hlist_node_t *head = list->head;
+        assert(head->prev == NULL && node->prev == NULL);
+        head->prev = node;
+        node->next = head;
         list->head = node;
     }
 
@@ -126,7 +129,10 @@ hlist_rpush(hlist_t *list, void *item)
         list->tail = node;
     } else {
         assert(list->head != NULL && list->tail != NULL);
-        list->tail->next = node;
+        hlist_node_t *tail = list->tail;
+        assert(tail->next == NULL && node->next == NULL);
+        tail->next = node;
+        node->prev = tail;
         list->tail = node;
     }
 
@@ -148,12 +154,20 @@ hlist_lpop(hlist_t *list)
     }
 
     assert(list->head != NULL && list->tail != NULL);
+
     hlist_node_t *head = list->head;
-    void *data = head->data;
-    list->head = head->next;
-    list->size -= 1;
-    if (list->head == NULL)
+    hlist_node_t *node = head->next;
+
+    if (node == NULL) {
         list->tail = NULL;
+    } else {
+        node->prev = NULL;
+    }
+
+    list->head = node;
+    list->size -= 1;
+
+    void *data = head->data;
     hlist_node_free(head);
     return data;
 }
@@ -172,12 +186,20 @@ hlist_rpop(hlist_t *list)
     }
 
     assert(list->head != NULL && list->tail != NULL);
+
     hlist_node_t *tail = list->tail;
-    void *data = tail->data;
-    list->tail = tail->prev;
-    list->size -= 1;
-    if (list->tail == NULL)
+    hlist_node_t *node = tail->prev;
+
+    if (node == NULL) {
         list->head = NULL;
+    } else {
+        node->next = NULL;
+    }
+
+    list->tail = node;
+    list->size -= 1;
+
+    void *data = tail->data;
     hlist_node_free(tail);
     return data;
 }
