@@ -81,7 +81,8 @@ hqueue_node_free(hqueue_node_t *node)
 /**
  * Push an item into queue, O(1);
  */
-int hqueue_push(hqueue_t *queue, void *item)
+int
+hqueue_push(hqueue_t *queue, void *item)
 {
     assert(queue != NULL);
 
