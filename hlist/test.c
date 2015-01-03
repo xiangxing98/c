@@ -20,6 +20,7 @@ void case_hlist_last();
 void case_hlist_get();
 void case_hlist_set();
 void case_hlist_del();
+void case_hlist_iter();
 
 int main(int argc, const char *argv[])
 {
@@ -37,7 +38,8 @@ int main(int argc, const char *argv[])
     test_case("hlist_last", &case_hlist_last);
     test_case("hlist_get", &case_hlist_get);
     test_case("hlist_set", &case_hlist_set);
-    test_case("hlist_det", &case_hlist_del);
+    test_case("hlist_del", &case_hlist_del);
+    test_case("hlist_iter", &case_hlist_iter);
     return 0;
 }
 
@@ -232,5 +234,29 @@ case_hlist_del()
     assert(hlist_del(list, 0) == HLIST_OK);
     assert(list->size == 0);
     assert(hlist_last(list) == NULL && hlist_first(list) == NULL);
+    hlist_free(list);
+}
+
+void
+case_hlist_iter()
+{
+    hlist_t *list = hlist_new();
+    char *s1 = "s1", *s2 = "s2", *s3 = "s3";
+    assert(hlist_rpush(list, (void *)s1) == HLIST_OK);
+    assert(hlist_rpush(list, (void *)s2) == HLIST_OK);
+    assert(hlist_rpush(list, (void *)s3) == HLIST_OK);
+
+    hlist_iterator_t *iterator = hlist_iterator_new(list);
+    assert(hlist_iterator_next(iterator) == s1);
+    assert(hlist_iterator_next(iterator) == s2);
+    assert(hlist_iterator_next(iterator) == s3);
+    assert(hlist_iterator_next(iterator) == NULL);
+
+    hlist_iterator_seek_tail(list, iterator);
+    assert(hlist_iterator_prev(iterator) == s3);
+    assert(hlist_iterator_prev(iterator) == s2);
+    assert(hlist_iterator_prev(iterator) == s1);
+    assert(hlist_iterator_prev(iterator) == NULL);
+    hlist_iterator_free(iterator);
     hlist_free(list);
 }

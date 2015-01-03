@@ -16,6 +16,16 @@
 
 /**
  * Double linked list implementation
+ *
+ * example iterate a list:
+ *
+ *   hlist_iterator_t *iterator = hlist_iterator_new(list);
+ *
+ *   void *data;
+ *
+ *   while((data = hlist_iterator_next(iterator)) != NULL) {
+ *     ...
+ *   }
  */
 
 #ifndef __HLIST_H
@@ -30,8 +40,8 @@ extern "C" {
 
 typedef enum {
     HLIST_OK = 0,
-    HLIST_ENOMEM = -1,
-    HLIST_EINDEX = -2,
+    HLIST_ENOMEM = -1,  /* No memory error */
+    HLIST_EINDEX = -2,  /* Invalid index error */
 } hlist_error_t;
 
 typedef struct hlist_node_st {
@@ -45,6 +55,10 @@ typedef struct hlist_st {
     hlist_node_t *tail;
     size_t size;
 } hlist_t;
+
+typedef struct hlist_iterator_st {
+    hlist_node_t *node;
+} hlist_iterator_t;
 
 hlist_node_t *hlist_node_new(void *);
 void hlist_node_free(hlist_node_t *);
@@ -60,6 +74,12 @@ void *hlist_last(hlist_t *);
 void *hlist_get(hlist_t *, size_t);
 int hlist_set(hlist_t *, size_t, void *);
 int hlist_del(hlist_t *, size_t);
+hlist_iterator_t *hlist_iterator_new(hlist_t *);
+void hlist_iterator_free(hlist_iterator_t *);
+void *hlist_iterator_next(hlist_iterator_t *);
+void *hlist_iterator_prev(hlist_iterator_t *);
+void hlist_iterator_seek_head(hlist_t *, hlist_iterator_t *);
+void hlist_iterator_seek_tail(hlist_t *, hlist_iterator_t *);
 
 #ifdef __cplusplus
 }

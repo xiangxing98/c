@@ -333,3 +333,84 @@ hlist_del(hlist_t *list, size_t index)
 
     return HLIST_EINDEX;
 }
+
+/**
+ * New iterator
+ */
+hlist_iterator_t *
+hlist_iterator_new(hlist_t *list)
+{
+    assert(list != NULL);
+
+    hlist_iterator_t *iterator = malloc(sizeof(hlist_iterator_t));
+
+    if (iterator != NULL) {
+        iterator->node = list->head;
+    }
+    return iterator;
+}
+
+/**
+ * Free iterator.
+ */
+void
+hlist_iterator_free(hlist_iterator_t *iterator)
+{
+    if (iterator != NULL)
+        free(iterator);
+}
+
+/**
+ * Get current node's data and seek next, O(1)
+ */
+void *
+hlist_iterator_next(hlist_iterator_t *iterator)
+{
+    assert(iterator != NULL);
+
+    hlist_node_t *node = iterator->node;
+
+    if (node == NULL)
+        return NULL;
+
+    iterator->node = node->next;
+    return node->data;
+}
+
+/**
+ * Get current node's data and seek prev, O(1)
+ */
+void *
+hlist_iterator_prev(hlist_iterator_t *iterator)
+{
+    assert(iterator != NULL);
+
+    hlist_node_t *node = iterator->node;
+
+    if (node == NULL)
+        return NULL;
+
+    iterator->node = node->prev;
+    return node->data;
+}
+
+
+/**
+ * Seek iterator to a list's head, O(1)
+ */
+void
+hlist_iterator_seek_head(hlist_t *list, hlist_iterator_t *iterator)
+{
+    assert(list != NULL && iterator != NULL);
+    iterator->node = list->head;
+}
+
+/**
+ * Seek iterator to a list's tail, O(1)
+ */
+void
+hlist_iterator_seek_tail(hlist_t *list, hlist_iterator_t *iterator)
+{
+    assert(list != NULL && iterator != NULL);
+    iterator->node = list->tail;
+}
