@@ -64,7 +64,7 @@ hstack_clear(hstack_t *stack)
 }
 
 /**
- * Grow stack allocation memory to given size, O(n)
+ * Grow stack allocation memory to given size, O(1), O(n)
  */
 int
 hstack_grow(hstack_t *stack, size_t size)
@@ -92,7 +92,7 @@ hstack_grow(hstack_t *stack, size_t size)
 }
 
 /**
- * Push an item into stack, O(1)~O(n).
+ * Push an item into stack, O(1), O(n).
  */
 int
 hstack_push(hstack_t *stack, void *item)

@@ -63,7 +63,7 @@ hbuf_clear(hbuf_t *buf)
 }
 
 /**
- * Increase buf allocated size to `size`
+ * Increase buf allocated size to `size`, O(1), O(n)
  */
 int
 hbuf_grow(hbuf_t *buf, size_t size)
@@ -92,7 +92,7 @@ hbuf_grow(hbuf_t *buf, size_t size)
 }
 
 /**
- * Get data as c string (terminate with '\0')
+ * Get data as c string (terminate with '\0'), O(1), O(n)
  */
 char *
 hbuf_str(hbuf_t *buf)
@@ -112,7 +112,7 @@ hbuf_str(hbuf_t *buf)
 }
 
 /**
- * Put a char to buf
+ * Put a char to buf, O(1), O(n)
  */
 int
 hbuf_putc(hbuf_t *buf, char ch)
@@ -137,7 +137,7 @@ hbuf_print(hbuf_t *buf)
 }
 
 /**
- * Put data to buf
+ * Put data to buf, O(n)
  */
 int
 hbuf_put(hbuf_t *buf, uint8_t *data, size_t size)
@@ -153,7 +153,7 @@ hbuf_put(hbuf_t *buf, uint8_t *data, size_t size)
 }
 
 /**
- * Put string to buf
+ * Put string to buf, O(n)
  */
 int
 hbuf_puts(hbuf_t *buf, char *str)
@@ -163,7 +163,7 @@ hbuf_puts(hbuf_t *buf, char *str)
 
 
 /**
- * Remove left data from buf by number of bytes
+ * Remove left data from buf by number of bytes, O(n)
  */
 void
 hbuf_lrm(hbuf_t *buf, size_t size)
@@ -181,7 +181,7 @@ hbuf_lrm(hbuf_t *buf, size_t size)
 
 
 /**
- * Remove right data from buf by number of bytes
+ * Remove right data from buf by number of bytes, O(1)
  */
 void
 hbuf_rrm(hbuf_t *buf, size_t size)
