@@ -103,7 +103,6 @@ hstack_pop(hstack_t *stack)
     return stack->data[--stack->size];
 }
 
-
 void *
 hstack_top(hstack_t *stack)
 {
