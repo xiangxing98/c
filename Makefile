@@ -11,4 +11,4 @@ test:
 clean:
 	make -C hbuf clean
 	make -C hstack clean
-	make -C hqueue test
+	make -C hqueue clean
