@@ -32,7 +32,9 @@ hqueue_new(void)
 void
 hqueue_free(hqueue_t *queue)
 {
-    hqueue_clear(queue);
+    hqueue_node_t *node = queue->head;
+
+    while (hqueue_pop(queue) != NULL);
 
     if (queue != NULL)
         free(queue);
@@ -42,17 +44,7 @@ void
 hqueue_clear(hqueue_t *queue)
 {
     assert(queue != NULL);
-
-    hqueue_node_t *node = queue->head;
-
-    while (node != NULL) {
-        hqueue_node_free(node);
-        node = node->next;
-    }
-
-    queue->head = NULL;
-    queue->tail = NULL;
-    queue->size = 0;
+    while (hqueue_pop(queue) != NULL);
 }
 
 hqueue_node_t *
@@ -82,13 +74,15 @@ int hqueue_push(hqueue_t *queue, void *item)
     if (node == NULL)
         return HQUEUE_ENOMEM;
 
-    if (queue->tail == NULL)
-        queue->tail = node;
-    else
-        queue->tail->next = node;
-
-    if (queue->head == NULL)
+    if (queue->size == 0) {
+        assert(queue->head == NULL && queue->tail == NULL);
         queue->head = node;
+        queue->tail = node;
+    } else {
+        assert(queue->head != NULL && queue->tail != NULL);
+        queue->tail->next = node;
+        queue->tail = node;
+    }
 
     queue->size += 1;
     return HQUEUE_OK;
@@ -99,14 +93,18 @@ hqueue_pop(hqueue_t *queue)
 {
     assert(queue != NULL);
 
-    if (queue->head == NULL || queue->size == 0)
+    if (queue->size == 0) {
+        assert(queue->head == NULL && queue->tail == NULL);
         return NULL;
-
-    hqueue_node_t *node = queue->head;
-    queue->head = node->next;
-    void *data = node->data;
-    hqueue_node_free(node);
+    }
+    assert(queue->head != NULL && queue->tail != NULL);
+    hqueue_node_t *head = queue->head;
+    void *data = head->data;
+    queue->head = head->next;
     queue->size -= 1;
+    if (queue->head == NULL)
+        queue->tail = NULL;
+    hqueue_node_free(head);
     return data;
 }
 
@@ -115,7 +113,10 @@ hqueue_top(hqueue_t *queue)
 {
     assert(queue != NULL);
 
-    if (queue->head == NULL || queue->size == 0)
+    if (queue->size == 0) {
+        assert(queue->head == NULL && queue->tail == NULL);
         return NULL;
+    }
+    assert(queue->head != NULL && queue->tail != NULL);
     return queue->head->data;
 }
