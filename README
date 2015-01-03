@@ -2,8 +2,8 @@ My C Practice
 -------------
 
 * hbuf (buffer)
-* hastack (array based stack)
-* haqueue (array based queue)
+* hstack (array based)
+* hqueue (list based)
 
 -------
 Copyright (c) 2015, Chao Wang (hit9 <hit9@icloud.com>)
