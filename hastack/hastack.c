@@ -15,26 +15,26 @@
  */
 
 
-#include "hstack.h"
+#include "hastack.h"
 
-hstack_t *
-hstack_new(size_t size)
+hastack_t *
+hastack_new(size_t size)
 {
-    hstack_t *stack = malloc(sizeof(hstack_t));
+    hastack_t *stack = malloc(sizeof(hastack_t));
 
     if (stack != NULL) {
         stack->data = NULL;
         stack->size = 0;
         stack->cap = 0;
         if (size > 0 &&
-                hstack_grow(stack, size) != HSTACK_OK)
+                hastack_grow(stack, size) != HASTACK_OK)
             return NULL;
     }
     return stack;
 }
 
 void
-hstack_free(hstack_t *stack)
+hastack_free(hastack_t *stack)
 {
     if (stack->data != NULL)
         free(stack->data);
@@ -43,7 +43,7 @@ hstack_free(hstack_t *stack)
 }
 
 void
-hstack_clear(hstack_t *stack)
+hastack_clear(hastack_t *stack)
 {
     assert(stack != NULL);
 
@@ -55,45 +55,45 @@ hstack_clear(hstack_t *stack)
 }
 
 int
-hstack_grow(hstack_t *stack, size_t size)
+hastack_grow(hastack_t *stack, size_t size)
 {
     assert(stack != NULL);
 
-    if (size > HSTACK_MAX_SIZE)
-        return HSTACK_ENOMEM;
+    if (size > HASTACK_MAX_SIZE)
+        return HASTACK_ENOMEM;
 
     if (size <= stack->cap)
-        return HSTACK_OK;
+        return HASTACK_OK;
 
     void **data = realloc(stack->data,
             size * sizeof(void *));
 
     if (data == NULL)
-        return HSTACK_ENOMEM;
+        return HASTACK_ENOMEM;
 
     stack->data = data;
     stack->cap = size;
 
     if (stack->size > size)
         stack->size = size;
-    return HSTACK_OK;
+    return HASTACK_OK;
 }
 
 int
-hstack_push(hstack_t *stack, void *item)
+hastack_push(hastack_t *stack, void *item)
 {
     assert(stack != NULL);
 
     if (stack->size == stack->cap &&
-            hstack_grow(stack, stack->size + 1) != HSTACK_OK)
-        return HSTACK_ENOMEM;
+            hastack_grow(stack, stack->size + 1) != HASTACK_OK)
+        return HASTACK_ENOMEM;
 
     stack->data[stack->size++] = item;
-    return HSTACK_OK;
+    return HASTACK_OK;
 }
 
 void *
-hstack_pop(hstack_t *stack)
+hastack_pop(hastack_t *stack)
 {
     assert(stack != NULL);
 
@@ -104,7 +104,7 @@ hstack_pop(hstack_t *stack)
 }
 
 void *
-hstack_top(hstack_t *stack)
+hastack_top(hastack_t *stack)
 {
 
     assert(stack != NULL);

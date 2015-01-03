@@ -2,32 +2,32 @@
 #ifdef __linux
 #include <mcheck.h>
 #endif
-#include "hstack.h"
+#include "hastack.h"
 
 typedef void (*case_t)();
 
 static void test_case(const char *, case_t);
 
-void case_hstack_new();
-void case_hstack_free();
-void case_hstack_clear();
-void case_hstack_grow();
-void case_hstack_push();
-void case_hstack_pop();
-void case_hstack_top();
+void case_hastack_new();
+void case_hastack_free();
+void case_hastack_clear();
+void case_hastack_grow();
+void case_hastack_push();
+void case_hastack_pop();
+void case_hastack_top();
 
 int main(int argc, const char *argv[])
 {
 #ifdef __linux
     mtrace();
 #endif
-    test_case("stack_hnew", &case_hstack_new);
-    test_case("stack_hfree", &case_hstack_free);
-    test_case("stack_hclear", &case_hstack_clear);
-    test_case("stack_hgrow", &case_hstack_grow);
-    test_case("stack_hpush", &case_hstack_push);
-    test_case("stack_hpop", &case_hstack_pop);
-    test_case("stack_htop", &case_hstack_top);
+    test_case("hastack_new", &case_hastack_new);
+    test_case("hastack_free", &case_hastack_free);
+    test_case("hastack_clear", &case_hastack_clear);
+    test_case("hastack_grow", &case_hastack_grow);
+    test_case("hastack_push", &case_hastack_push);
+    test_case("hastack_pop", &case_hastack_pop);
+    test_case("hastack_top", &case_hastack_top);
     return 0;
 }
 
@@ -39,85 +39,85 @@ test_case(const char *name, case_t case_func)
 }
 
 void
-case_hstack_new()
+case_hastack_new()
 {
-    hstack_t *stack = hstack_new(10);
+    hastack_t *stack = hastack_new(10);
     assert(stack != NULL && stack->size == 0 &&
             stack->cap == 10 && stack->data != NULL);
-    hstack_free(stack);
+    hastack_free(stack);
 }
 
 void
-case_hstack_free()
+case_hastack_free()
 {
-    hstack_t *stack = hstack_new(10);
-    hstack_free(stack);
+    hastack_t *stack = hastack_new(10);
+    hastack_free(stack);
 }
 
 void
-case_hstack_clear()
+case_hastack_clear()
 {
-    hstack_t *stack = hstack_new(10);
+    hastack_t *stack = hastack_new(10);
     int item = 1;
-    hstack_push(stack, (void *)&item);
-    hstack_clear(stack);
+    hastack_push(stack, (void *)&item);
+    hastack_clear(stack);
     assert(stack->size == 0 && stack->cap == 0 &&
             stack->data == NULL);
-    hstack_free(stack);
+    hastack_free(stack);
 }
 
 void
-case_hstack_grow()
+case_hastack_grow()
 {
-    hstack_t *stack = hstack_new(10);
-    assert(hstack_grow(stack, 20) == HSTACK_OK);
+    hastack_t *stack = hastack_new(10);
+    assert(hastack_grow(stack, 20) == HASTACK_OK);
     assert(stack->data != NULL && stack->size == 0
             && stack->cap == 20);
-    hstack_free(stack);
+    hastack_free(stack);
 }
 
 void
-case_hstack_push()
+case_hastack_push()
 {
-    hstack_t *stack = hstack_new(0);
+    hastack_t *stack = hastack_new(0);
     char *s1 = "s1";
     char *s2 = "s2";
-    assert(hstack_push(stack, (void *)s1) == HSTACK_OK);
-    assert(hstack_push(stack, (void *)s2) == HSTACK_OK);
+    assert(hastack_push(stack, (void *)s1) == HASTACK_OK);
+    assert(hastack_push(stack, (void *)s2) == HASTACK_OK);
     assert(stack->size == 2 && stack->cap == 2);
-    assert(hstack_top(stack) == s2);
-    assert(hstack_pop(stack) == s2);
-    assert(hstack_pop(stack) == s1);
+    assert(hastack_top(stack) == s2);
+    assert(hastack_pop(stack) == s2);
+    assert(hastack_pop(stack) == s1);
     assert(stack->size == 0 && stack->cap == 2);
-    hstack_free(stack);
+    hastack_free(stack);
 }
 
 void
-case_hstack_pop()
+case_hastack_pop()
 {
-    hstack_t *stack = hstack_new(8);
+    hastack_t *stack = hastack_new(8);
     char *s1 = "s1";
     char *s2 = "s2";
-    assert(hstack_push(stack, (void *)s1) == HSTACK_OK);
-    assert(hstack_push(stack, (void *)s2) == HSTACK_OK);
+    assert(hastack_push(stack, (void *)s1) == HASTACK_OK);
+    assert(hastack_push(stack, (void *)s2) == HASTACK_OK);
     assert(stack->size == 2 && stack->cap == 8);
-    assert(hstack_pop(stack) == s2);
-    assert(hstack_pop(stack) == s1);
+    assert(hastack_pop(stack) == s2);
+    assert(hastack_pop(stack) == s1);
     assert(stack->size == 0 && stack->cap == 8);
-    hstack_free(stack);
+    hastack_free(stack);
 }
 
 void
-case_hstack_top()
+case_hastack_top()
 {
-    hstack_t *stack = hstack_new(8);
+    hastack_t *stack = hastack_new(8);
     char *s1 = "s1";
     char *s2 = "s2";
-    assert(hstack_push(stack, (void *)s1) == HSTACK_OK);
-    assert(hstack_push(stack, (void *)s2) == HSTACK_OK);
-    assert(hstack_top(stack) == s2);
-    assert(hstack_pop(stack) == s2);
-    assert(hstack_top(stack) == s1);
+    assert(hastack_push(stack, (void *)s1) == HASTACK_OK);
+    assert(hastack_push(stack, (void *)s2) == HASTACK_OK);
+    assert(hastack_top(stack) == s2);
+    assert(hastack_pop(stack) == s2);
+    assert(hastack_top(stack) == s1);
     assert(stack->size == 1 && stack->cap == 8);
-    hstack_free(stack);
+    hastack_free(stack);
 }
