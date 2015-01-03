@@ -5,4 +5,5 @@
 *.log
 *.dSYM
 hbuf/hbuf
-hstack/hstack
+hastack/hastack
+haqueue/haqueue
