@@ -1,9 +1,10 @@
 My C Practice
 -------------
 
-* hbuf (buffer)
+* hbuf (uint8_t buffer)
 * hstack (array based)
 * hqueue (list based)
+* hlist (double linked)
 
 -------
 Copyright (c) 2015, Chao Wang (hit9 <hit9@icloud.com>)
