@@ -38,12 +38,10 @@ hqueue_new(void)
 void
 hqueue_free(hqueue_t *queue)
 {
-    hqueue_node_t *node = queue->head;
-
-    while (hqueue_pop(queue) != NULL);
-
-    if (queue != NULL)
+    if (queue != NULL) {
+        hqueue_clear(queue);
         free(queue);
+    }
 }
 
 /**
