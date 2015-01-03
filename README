@@ -1,3 +1,11 @@
+My C Practice
+-------------
+
+* hbuf
+* hastack (array based stack)
+* haqueue (array based queue)
+
+-------
 Copyright (c) 2015, Chao Wang (hit9 <hit9@icloud.com>)
 
 https://github.com/hit9/c.git
