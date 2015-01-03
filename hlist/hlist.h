@@ -14,6 +14,10 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
+/**
+ * Double linked list implementation
+ */
+
 #ifndef __HLIST_H
 #define __HLIST_H
 
@@ -23,8 +27,6 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-#define HLIST_MAX_SIZE 16 * 1024 * 1024  //16mb
 
 typedef enum {
     HLIST_OK = 0,
@@ -41,12 +43,22 @@ typedef struct hlist_st {
     hlist_node_t *head;
     hlist_node_t *tail;
     size_t size;
-    size_t cap;
 } hlist_t;
 
-hlist_t *hlist_new(size_t);
+hlist_node_t *hlist_node_new(void *);
+void hlist_node_free(hlist_node_t *);
+hlist_t *hlist_new(void);
 void hlist_free(hlist_t *);
 void hlist_clear(hlist_t *);
+int hlist_lpush(hlist_t *, void *);
+int hlist_rpush(hlist_t *, void *);
+void *hlist_lpop(hlist_t *);
+void *hlist_rpop(hlist_t *);
+void *hlist_first(hlist_t *);
+void *hlist_last(hlist_t *);
+void *hlist_get(hlist_t *, size_t);
+int hlist_set(hlist_t *, size_t, void *);
+int hlist_del(hlist_t *, size_t, void *);
 
 #ifdef __cplusplus
 }
