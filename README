@@ -1,7 +1,7 @@
 My C Practice
 -------------
 
-* hbuf
+* hbuf (buffer)
 * hastack (array based stack)
 * haqueue (array based queue)
 
