@@ -1,7 +1,7 @@
 test:
 	make -C hbuf test
-	make -C hastack test
+	make -C hstack test
 
 clean:
 	make -C hbuf clean
-	make -C hastack clean
+	make -C hstack clean

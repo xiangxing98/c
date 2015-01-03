@@ -18,8 +18,8 @@
  * List based queue implementation
  */
 
-#ifndef __HLQUEUE_H
-#define __HLQUEUE_H
+#ifndef __HQUEUE_H
+#define __HQUEUE_H
 
 #include <assert.h>
 #include <stdlib.h>
@@ -29,29 +29,29 @@ extern "C" {
 #endif
 
 typedef enum {
-    HLQUEUE_OK = 0,
-    HLQUEUE_ENOMEM = -1,
-} hlqueue_error_t;
+    HQUEUE_OK = 0,
+    HQUEUE_ENOMEM = -1,
+} hqueue_error_t;
 
-typedef struct hlqueue_node_st {
+typedef struct hqueue_node_st {
     void *data;
-    struct hlqueue_node_st *next;
-} hlqueue_node_t;
+    struct hqueue_node_st *next;
+} hqueue_node_t;
 
-typedef struct hlqueue_st {
+typedef struct hqueue_st {
     size_t size;
-    struct hlqueue_node_st *head;
-    struct hlqueue_node_st *tail;
-} hlqueue_t;
+    struct hqueue_node_st *head;
+    struct hqueue_node_st *tail;
+} hqueue_t;
 
-hlqueue_t *hlqueue_new(void);
-void hlqueue_free(hlqueue_t *);
-void hlqueue_clear(hlqueue_t *);
-hlqueue_node_t *hlqueue_node_new(void *);
-void hlqueue_node_free(hlqueue_node_t *);
-int hlqueue_push(hlqueue_t *, void *);
-void *hlqueue_pop(hlqueue_t *);
-void *hlqueue_top(hlqueue_t *);
+hqueue_t *hqueue_new(void);
+void hqueue_free(hqueue_t *);
+void hqueue_clear(hqueue_t *);
+hqueue_node_t *hqueue_node_new(void *);
+void hqueue_node_free(hqueue_node_t *);
+int hqueue_push(hqueue_t *, void *);
+void *hqueue_pop(hqueue_t *);
+void *hqueue_top(hqueue_t *);
 
 #ifdef __cplusplus
 }

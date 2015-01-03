@@ -14,12 +14,12 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-#include "hlqueue.h"
+#include "hqueue.h"
 
-hlqueue_t *
-hlqueue_new(void)
+hqueue_t *
+hqueue_new(void)
 {
-    hlqueue_t *queue = malloc(sizeof(hlqueue_t));
+    hqueue_t *queue = malloc(sizeof(hqueue_t));
 
     if (queue != NULL) {
         queue->head = NULL;
@@ -30,23 +30,23 @@ hlqueue_new(void)
 }
 
 void
-hlqueue_free(hlqueue_t *queue)
+hqueue_free(hqueue_t *queue)
 {
-    hlqueue_clear(queue);
+    hqueue_clear(queue);
 
     if (queue != NULL)
         free(queue);
 }
 
 void
-hlqueue_clear(hlqueue_t *queue)
+hqueue_clear(hqueue_t *queue)
 {
     assert(queue != NULL);
 
-    hlqueue_node_t *node = queue->head;
+    hqueue_node_t *node = queue->head;
 
     while (node != NULL) {
-        hlqueue_node_free(node);
+        hqueue_node_free(node);
         node = node->next;
     }
 
@@ -55,9 +55,9 @@ hlqueue_clear(hlqueue_t *queue)
     queue->size = 0;
 }
 
-hlqueue_node_t *
-hlqueue_node_new(void *data) {
-    hlqueue_node_t *node = malloc(sizeof(hlqueue_node_t));
+hqueue_node_t *
+hqueue_node_new(void *data) {
+    hqueue_node_t *node = malloc(sizeof(hqueue_node_t));
 
     if (node != NULL) {
         node->next = NULL;
@@ -67,20 +67,20 @@ hlqueue_node_new(void *data) {
 }
 
 void
-hlqueue_node_free(hlqueue_node_t *node)
+hqueue_node_free(hqueue_node_t *node)
 {
     if (node != NULL)
         free(node);
 }
 
-int hlqueue_push(hlqueue_t *queue, void *item)
+int hqueue_push(hqueue_t *queue, void *item)
 {
     assert(queue != NULL);
 
-    hlqueue_node_t *node = hlqueue_node_new(item);
+    hqueue_node_t *node = hqueue_node_new(item);
 
     if (node == NULL)
-        return HLQUEUE_ENOMEM;
+        return HQUEUE_ENOMEM;
 
     if (queue->tail == NULL)
         queue->tail = node;
@@ -91,27 +91,27 @@ int hlqueue_push(hlqueue_t *queue, void *item)
         queue->head = node;
 
     queue->size += 1;
-    return HLQUEUE_OK;
+    return HQUEUE_OK;
 }
 
 void *
-hlqueue_pop(hlqueue_t *queue)
+hqueue_pop(hqueue_t *queue)
 {
     assert(queue != NULL);
 
     if (queue->head == NULL || queue->size == 0)
         return NULL;
 
-    hlqueue_node_t *node = queue->head;
+    hqueue_node_t *node = queue->head;
     queue->head = node->next;
     void *data = node->data;
-    hlqueue_node_free(node);
+    hqueue_node_free(node);
     queue->size -= 1;
     return data;
 }
 
 void *
-hlqueue_top(hlqueue_t *queue)
+hqueue_top(hqueue_t *queue)
 {
     assert(queue != NULL);
 
