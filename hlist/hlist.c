@@ -138,7 +138,7 @@ hlist_rpush(hlist_t *list, void *item)
  * Pop an item from list on the left end, O(1).
  */
 void *
-hlist_lpop(hlist_t *list, void *item)
+hlist_lpop(hlist_t *list)
 {
     assert(list != NULL);
 
@@ -162,7 +162,7 @@ hlist_lpop(hlist_t *list, void *item)
  * Pop an item from list on the right end, O(1).
  */
 void *
-hlist_rpop(hlist_t *list, void *item)
+hlist_rpop(hlist_t *list)
 {
     assert(list != NULL);
 
@@ -186,7 +186,7 @@ hlist_rpop(hlist_t *list, void *item)
  * Get the first item in the list, O(1).
  */
 void *
-hlist_first(hlist_t *list, void *item)
+hlist_first(hlist_t *list)
 {
     assert(list != NULL);
 
@@ -202,7 +202,7 @@ hlist_first(hlist_t *list, void *item)
  * Get the last item in the list, O(1).
  */
 void *
-hlist_first(hlist_t *list, void *item)
+hlist_last(hlist_t *list)
 {
     assert(list != NULL);
 
