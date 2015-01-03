@@ -31,6 +31,7 @@ extern "C" {
 typedef enum {
     HLIST_OK = 0,
     HLIST_ENOMEM = -1,
+    HLIST_EINDEX = -2,
 } hlist_error_t;
 
 typedef struct hlist_node_st {
@@ -58,7 +59,7 @@ void *hlist_first(hlist_t *);
 void *hlist_last(hlist_t *);
 void *hlist_get(hlist_t *, size_t);
 int hlist_set(hlist_t *, size_t, void *);
-int hlist_del(hlist_t *, size_t, void *);
+int hlist_del(hlist_t *, size_t);
 
 #ifdef __cplusplus
 }
