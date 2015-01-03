@@ -14,12 +14,10 @@ clean:
 run: $(NAME)
 	./$(NAME)
 
-	
 test: $(NAME)
 ifeq ($(UNAME), Linux)
 	touch $(NAME).log
 	env MALLOC_TRACE=$(NAME).log ./$(NAME)
-	@echo "memory leaks check result:"
 	mtrace $(NAME) ${NAME}.log
 	rm $(NAME).log
 else

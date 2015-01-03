@@ -14,7 +14,6 @@ clean:
 run: $(NAME)
 	./$(NAME)
 
-	
 test: $(NAME)
 ifeq ($(UNAME), Linux)
 	touch $(NAME).log
