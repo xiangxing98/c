@@ -2,6 +2,7 @@
 .*.swo
 .*.swn
 *.o
+*.out
 *.log
 *.dSYM
 hbuf/hbuf
