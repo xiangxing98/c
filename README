@@ -5,6 +5,7 @@ My C Practice
 * hstack (array based)
 * hqueue (list based)
 * hlist (double linked)
+* hdict (bkdrhash based)
 
 -------
 Copyright (c) 2015, Chao Wang (hit9 <hit9@icloud.com>)
