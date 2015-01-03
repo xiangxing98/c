@@ -16,6 +16,9 @@
 
 #include "hqueue.h"
 
+/**
+ * New queue.
+ */
 hqueue_t *
 hqueue_new(void)
 {
@@ -29,6 +32,9 @@ hqueue_new(void)
     return queue;
 }
 
+/**
+ * Free queue.
+ */
 void
 hqueue_free(hqueue_t *queue)
 {
@@ -40,6 +46,9 @@ hqueue_free(hqueue_t *queue)
         free(queue);
 }
 
+/**
+ * Clear queue, O(n)
+ */
 void
 hqueue_clear(hqueue_t *queue)
 {
@@ -47,6 +56,9 @@ hqueue_clear(hqueue_t *queue)
     while (hqueue_pop(queue) != NULL);
 }
 
+/**
+ * New queue node.
+ */
 hqueue_node_t *
 hqueue_node_new(void *data) {
     hqueue_node_t *node = malloc(sizeof(hqueue_node_t));
@@ -58,6 +70,9 @@ hqueue_node_new(void *data) {
     return node;
 }
 
+/**
+ * Free queue node.
+ */
 void
 hqueue_node_free(hqueue_node_t *node)
 {
@@ -65,6 +80,9 @@ hqueue_node_free(hqueue_node_t *node)
         free(node);
 }
 
+/**
+ * Push an item into queue, O(1);
+ */
 int hqueue_push(hqueue_t *queue, void *item)
 {
     assert(queue != NULL);
@@ -88,6 +106,9 @@ int hqueue_push(hqueue_t *queue, void *item)
     return HQUEUE_OK;
 }
 
+/**
+ * Pop an item from queue, O(1);
+ */
 void *
 hqueue_pop(hqueue_t *queue)
 {
@@ -108,6 +129,9 @@ hqueue_pop(hqueue_t *queue)
     return data;
 }
 
+/**
+ * Get the top item in queue, O(1);
+ */
 void *
 hqueue_top(hqueue_t *queue)
 {
