@@ -17,7 +17,7 @@
 #include "hbuf.h"
 
 /**
- * New buf
+ * New buf.
  */
 hbuf_t *
 hbuf_new(size_t unit)
@@ -35,7 +35,7 @@ hbuf_new(size_t unit)
 }
 
 /**
- * Free buf
+ * Free buf.
  */
 void
 hbuf_free(hbuf_t *buf)
@@ -48,7 +48,7 @@ hbuf_free(hbuf_t *buf)
 
 
 /**
- * Free buf data
+ * Free buf data.
  */
 void
 hbuf_clear(hbuf_t *buf)
