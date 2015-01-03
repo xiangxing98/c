@@ -14,6 +14,10 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
+/**
+ * Array-based implementation stack.
+ */
+
 #ifndef __HSTACK_H
 #define __HSTACK_H
 
