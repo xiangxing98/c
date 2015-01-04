@@ -15,7 +15,7 @@
  */
 
 /**
- * Open-Addressing Hashtable implementation.
+ * Open-Addressing hashtable implementation.
  */
 
 #ifndef __HDICT_H
@@ -25,6 +25,8 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+#define HDICT_MAX_SIZE 16 * 1024 * 1024  // 16mb
 
 typedef enum {
     HDICT_OK = 0,
