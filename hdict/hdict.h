@@ -15,7 +15,7 @@
  */
 
 /**
- * Open-Addressing hashtable implementation.
+ * BKDRHash hashtable implementation (list based).
  */
 
 #ifndef __HDICT_H
@@ -26,7 +26,7 @@
 extern "C" {
 #endif
 
-#define HDICT_MAX_SIZE 16 * 1024 * 1024  // 16mb
+#define HDICT_LOAD_LIMIT 0.75 // load factor limit
 
 typedef enum {
     HDICT_OK = 0,
@@ -36,13 +36,24 @@ typedef enum {
 typedef struct hdict_bucket_st {
     void *key;
     void *val;
+    struct hdict_bucket_st *next;
 } hdict_bucket_t;
 
 typeof struct {
-    bucket_t **data;
-    size_t size;
-    size_t cap;
+    bucket_t **table;                /* bucket list table */
+    size_t size;                     /* buckets number */
+    size_t size_index;               /* index in primes */
+    int (* keycmp)(void *, void *);  /* like strcmp */
 } hdict_t;
+
+hdict_t *hdict_new(int (*)(void *, void *));
+void hdict_free(hdict_t *);
+void hdict_clear(hdict_t *);
+int hdict_grow(hdict_t *, size_t);
+void hdict_rehash(hdict_t *);
+int hdict_set(hdict_t *, void *, void *);
+void *hdict_get(hdict_t *, void *);
+int hdict_del(hdict_t *, void *);
 
 #ifdef __cplusplus
 }
