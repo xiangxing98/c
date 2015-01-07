@@ -39,9 +39,9 @@ typedef struct hqueue_node_st {
 } hqueue_node_t;
 
 typedef struct hqueue_st {
-    size_t size;
     struct hqueue_node_st *head;
     struct hqueue_node_st *tail;
+    size_t size;
 } hqueue_t;
 
 hqueue_t *hqueue_new(void);
