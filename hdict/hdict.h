@@ -31,18 +31,19 @@ extern "C" {
 typedef enum {
     HDICT_OK = 0,
     HDICT_ENOMEM = -1,      /* No memory error */
+    HDICT_ENOTFOUND = -2,   /* Key was not found */
 } hdict_error_t;
 
-typedef struct hdict_bucket_st {
+typedef struct hdict_node_st {
     void *key;
     void *val;
-    struct hdict_bucket_st *next;
-} hdict_bucket_t;
+    struct hdict_node_st *next;
+} hdict_node_t;
 
 typeof struct {
-    bucket_t **table;                /* bucket list table */
-    size_t size;                     /* buckets number */
-    size_t size_index;               /* index in primes */
+    bucket_t **table;                /* buckets table */
+    size_t size;                     /* buckets table size */
+    size_t table_size_index;         /* index in table_sizes */
     int (* keycmp)(void *, void *);  /* like strcmp */
 } hdict_t;
 
