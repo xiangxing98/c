@@ -49,8 +49,6 @@ typeof struct {
 hdict_t *hdict_new(int (*)(void *, void *));
 void hdict_free(hdict_t *);
 void hdict_clear(hdict_t *);
-int hdict_grow(hdict_t *, size_t);
-void hdict_rehash(hdict_t *);
 int hdict_set(hdict_t *, void *, void *);
 void *hdict_get(hdict_t *, void *);
 int hdict_del(hdict_t *, void *);

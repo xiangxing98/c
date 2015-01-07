@@ -48,7 +48,7 @@ static size_t primes[] = {
     2147483647
 };
 
-static size_t size_index_max = sizeof(primes) / sizeof(primes[0]);
+static size_t size_index_max = sizeof(primes) / sizeof(primes[0]);  // 29
 
 /**
  * BKDRHash.
@@ -65,16 +65,96 @@ bkdrhash(void *key)
 }
 
 /**
- * Get index
+ * Get index.
  */
-static size_t
-hash_index(hdict_t *dict, void *key)
+size_t
+get_index(size_t size_index, void *key)
 {
-    return bkdrhash(key) % primes[dict->size_index];
+    assert(size_index < size_index_max);
+    return  bkdrhash(key) % primes[size_index];
 }
 
 /**
- * New bucket.
+ * Grow allocation memory
+ */
+int
+hdict_grow(hdict_t *dict, size_t size_index)
+{
+    if (size_index_max < size_index)
+        return HDICT_ENOMEM;
+
+    if (size_index <= dict->size_index)
+        return HDICT_OK;
+
+    size_t size = primes[size_index];
+
+    hdict_bucket_t **table = realloc(dict->table,
+            sizeof(hdict_bucket_t *) * size);
+
+    if (table == NULL)
+        return HDICT_ENOMEM;
+
+    dict->size_index = size_index;
+    dict->table = table;
+    return HDICT_OK;
+}
+
+/**
+ * Rehash
+ */
+int
+hdict_rehash(hdict_t *dict)
+{
+    assert(dict != NULL && dict->size_index < size_index_max);
+
+    size_t new_size_index = dict->size_index + 1;
+
+    if (size_index_max < new_size_index)
+        return HDICT_ENOMEM;
+
+    size_t new_size = primes[new_size_index];
+    hdict_bucket_t **new_table = malloc(
+            new_size * sizeof(hdict_bucket_t *));
+
+    memset(new_table, NULL, new_size * sizeof(hdict_bucket_t *));
+
+    size_t i;
+    hdict_bucket_t *bucket, *cursor;
+
+    for (i = 0; i < dict->size; i++) {
+        bucket = (dict->table)[i];
+
+        while (bucket != NULL) {
+            hdict_bucket_t *new_bucket = hdict_bucket_new(
+                    bucket->key, bucket->val);
+
+            if (new_bucket == NULL)
+                return HDICT_ENOMEM;
+
+            size_t new_index = get_index(size_index, new_bucket->key);
+            cursor = new_table[new_index];
+
+            if (cursor == NULL)
+                new_table[new_index] = new_bucket;
+            else {
+                while (cursor->next != NULL)
+                    cursor = cursor->next;
+                cursor->next = new_bucket;
+            }
+            hdict_bucket_t *temp = bucket;
+            bucket = bucket->next;
+            hdict_bucket_free(temp);
+        }
+    }
+    free(dict->table);
+
+    dict->table = new_table;
+    dict->size_index = new_size_index;
+    return HDICT_OK;
+}
+
+/**
+ * New dict bucket.
  */
 hdict_bucket_t *
 hdict_bucket_new(void *key, void *val)
@@ -90,7 +170,7 @@ hdict_bucket_new(void *key, void *val)
 }
 
 /**
- * Free bucket.
+ * Free dict bucket.
  */
 void
 hdict_bucket_free(hdict_bucket_t *bucket)
@@ -112,64 +192,11 @@ hdict_new(int (* keycmp)(void *, void *))
         dict->size = 0;
         dict->size_index = 0;
         dict->keycmp = keycmp;
+
         if (hdict_grow(dict, dict->size_index) != HDICT_OK)
             return NULL;
     }
     return dict;
-}
-
-/**
- * Free dict.
- */
-void
-hdict_free(hdict_t *dict)
-{
-    hdict_clear();
-
-    if (dict != NULL)
-        free(dict);
-}
-
-/**
- * Clear dict.
- */
-void
-hdict_clear(hdict_t *dict)
-{
-    // ?
-}
-
-/**
- * Grow dict allocation size.
- */
-int
-hdict_grow(hdict_t *dict, size_t size_index)
-{
-    assert(dict != NULL);
-
-    if (size_index >= SIZE_INDEX_MAX)
-        return HDICT_ENOMEM;
-
-    if (size_index <= dict->size_index)
-        return HDICT_OK;
-
-    size_t size = primes[size_index];
-    hdict_bucket_t **table = realloc(sizeof(hdict_bucket_t *) * size);
-
-    if (table == NULL)
-        return HDICT_ENOMEM;
-
-    dict->size_index = size_index;
-    return HDICT_OK;
-}
-
-/**
- * Rehash dict. (including growing allocation)
- */
-int
-hdict_rehash(hdict_t *dict)
-{
-
 }
 
 /**
@@ -180,35 +207,7 @@ hdict_set(hdict_t *dict, void *key, void *val)
 {
     assert(dict != NULL && dict->keycmp != NULL);
 
-    if (primes[dict->size_index] * 0.75 < dict->size) {
-        // rehash
-    }
-
-    size_t index = hash_index(dict, key);
-    bucket_t *head = (dict->table)[index], bucket = head;
-
-    while (bucket != NULL) {
-        if ((dict->keycmp)(key, bucket->key) == 0) {
-            bucket->key = key;
-            bucket->val = val;
-            return HDICT_OK;
-        }
-        tail = bucket;
-        bucket = bucket->next;
-    }
-
-    bucket_t *new_bucket = hdict_bucket_new(key, val);
-
-    if (new_bucket == NULL)
+    if (primes[dict->size_index] * HDICT_LOAD_LIMIT < dict->size &&
+            hdict_rehash(dict) != HDICT_OK)
         return HDICT_ENOMEM;
-
-    if (head == NULL) {
-        (dict->table)[index] = new_bucket;
-    } else {
-        for (bucket = head; bucket->next != NULL;
-                bucket = bucket->next);
-        bucket->next = new_bucket;
-    }
-    dict->size += 1;
-    return HDICT_OK;
 }
