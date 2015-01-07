@@ -346,3 +346,41 @@ hdict_del(hdict_t *dict, uint8_t *key, size_t key_len)
 
     return HDICT_ENOTFOUND;
 }
+
+/**
+ * New dict iterator.
+ */
+hdict_iterator_t *
+hdict_iterator_new(hdict_t *dict)
+{
+    assert(dict != NULL && dict->table != NULL);
+
+    hdict_iterator_t *iterator = malloc(sizeof(hdict_iterator_t));
+
+    if (iterator != NULL) {
+        iterator->node = (dict->table)[0];
+        iterator->index = 0;
+        iterator->table_size_index = dict->table_size_index;
+    }
+    return iterator;
+}
+
+/**
+ * Free dict iterator.
+ */
+void
+hdict_iterator_free(hdict_iterator_t *iterator)
+{
+    if (iterator != NULL)
+        free(iterator);
+}
+
+/**
+ * Get next key and val
+ */
+int
+hdict_iterator_next(hdict_iterator_t *iterator, uint8_t **key_addr, \
+        size_t *key_len_addr, void **val_addr)
+{
+    // TODO
+}

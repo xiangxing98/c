@@ -44,11 +44,17 @@ typedef struct hdict_node_st {
     struct hdict_node_st *next;
 } hdict_node_t;
 
-typedef struct {
+typedef struct hdict_st {
     hdict_node_t **table;            /* buckets table */
     size_t size;                     /* buckets table size */
     size_t table_size_index;         /* index in table_sizes */
 } hdict_t;
+
+typedef struct hdict_iterator_st {
+    hdict_node_t *node;
+    size_t index;
+    size_t table_size_index;
+} hdict_iterator_t;
 
 hdict_t *hdict_new();
 void hdict_free(hdict_t *);
@@ -57,6 +63,9 @@ int hdict_set(hdict_t *, uint8_t *, size_t, void *);
 void *hdict_get(hdict_t *, uint8_t *, size_t);
 int hdict_has(hdict_t *, uint8_t *, size_t);
 int hdict_del(hdict_t *, uint8_t *, size_t);
+hdict_iterator_t *hdict_iterator_new(hdict_t *);
+void hdict_iterator_free(hdict_iterator_t *);
+int hdict_iterator_next(hdict_iterator_t *, uint8_t **, size_t *, void **);
 
 #ifdef __cplusplus
 }
