@@ -53,6 +53,7 @@ void hdict_free(hdict_t *);
 void hdict_clear(hdict_t *);
 int hdict_set(hdict_t *, char *, void *);
 void *hdict_get(hdict_t *, char *);
+int hdict_has(hdict_t *, char *);
 int hdict_del(hdict_t *, char *);
 
 #ifdef __cplusplus

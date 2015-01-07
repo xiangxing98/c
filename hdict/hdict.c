@@ -289,6 +289,26 @@ hdict_get(hdict_t *dict, char *key)
 }
 
 /**
+ * Test if a key is in the dict.
+ */
+int
+hdict_has(hdict_t *dict, char *key)
+{
+    assert(dict != NULL);
+
+    size_t index = get_table_index(dict->table_size_index, key);
+    hdict_node_t *node = (dict->table)[index];
+
+    while (node != NULL) {
+        if (strcmp(node->key, key) == 0)
+            return HDICT_OK;
+        node = node->next;
+    }
+
+    return HDICT_ENOTFOUND;
+}
+
+/**
  * Del val from dict by key.
  */
 int
