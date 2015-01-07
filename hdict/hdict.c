@@ -55,7 +55,7 @@ static size_t table_size_index_max = sizeof(table_sizes) / sizeof(table_sizes[0]
 static size_t
 bkdrhash(uint8_t *key, size_t key_len)
 {
-    size_t seed = 131;  // 31 131 1313 13131..
+    size_t seed = 13131;  // 31 131 1313 13131..
     size_t hash = 0;
 
     for(; key_len > 0; key_len--)
@@ -142,12 +142,14 @@ hdict_resize(hdict_t *dict)
                     new_table_size_index, new_node->key, new_node->key_len);
             hdict_node_t *cursor = new_table[new_index];
 
-            if (cursor == NULL)  // if head node is empty
+            if (cursor == NULL)
+                // set head node
                 new_table[new_index] = new_node;
             else {
-                while (cursor->next != NULL)  // find last node
+                while (cursor->next != NULL)
                     cursor = cursor->next;
-                cursor->next = node;
+                // set tail node
+                cursor->next = new_node;
             }
 
             hdict_node_t *next_node = node->next;
