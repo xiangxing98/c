@@ -53,12 +53,12 @@ static size_t table_size_index_max = sizeof(table_sizes) / sizeof(table_sizes[0]
  * BKDRHash
  */
 static size_t
-bkdrhash(char *key)
+bkdrhash(uint8_t *key, size_t key_len)
 {
     size_t seed = 131;  // 31 131 1313 13131..
     size_t hash = 0;
 
-    while(*key != 0)
+    for(; key_len > 0; key_len--)
         hash = hash * seed + (*key++);
     return (hash & 0x7FFFFFFF);
 }
@@ -67,22 +67,23 @@ bkdrhash(char *key)
  * Get table size index.
  */
 size_t
-get_table_index(size_t table_size_index, char *key)
+get_table_index(size_t table_size_index, uint8_t *key, size_t key_len)
 {
     assert(table_size_index <= table_size_index_max);
-    return bkdrhash(key) % table_sizes[table_size_index];
+    return bkdrhash(key, key_len) % table_sizes[table_size_index];
 }
 
 /**
  * New node.
  */
 hdict_node_t *
-hdict_node_new(char *key, void *val)
+hdict_node_new(uint8_t *key, size_t key_len, void *val)
 {
     hdict_node_t *node = malloc(sizeof(hdict_node_t));
 
     if (node != NULL) {
         node->key = key;
+        node->key_len = key_len;
         node->val = val;
         node->next = NULL;
     }
@@ -132,13 +133,13 @@ hdict_resize(hdict_t *dict)
 
         while (node != NULL) {
             hdict_node_t *new_node = hdict_node_new(node->key,
-                    node->val);
+                    node->key_len, node->val);
 
             if (new_node == NULL)
                 return HDICT_ENOMEM;
 
             size_t new_index = get_table_index(
-                    new_table_size_index, new_node->key);
+                    new_table_size_index, new_node->key, new_node->key_len);
             hdict_node_t *cursor = new_table[new_index];
 
             if (cursor == NULL)  // if head node is empty
@@ -226,7 +227,7 @@ void hdict_free(hdict_t *dict)
  * Set a key to dict.
  */
 int
-hdict_set(hdict_t *dict, char *key, void *val)
+hdict_set(hdict_t *dict, uint8_t *key, size_t key_len, void *val)
 {
     assert(dict != NULL);
 
@@ -234,13 +235,14 @@ hdict_set(hdict_t *dict, char *key, void *val)
             hdict_resize(dict) != HDICT_OK)
         return HDICT_ENOMEM;
 
-    size_t index = get_table_index(dict->table_size_index, key);
+    size_t index = get_table_index(dict->table_size_index, key, key_len);
     hdict_node_t *node = (dict->table)[index];
 
     // try to find this key
     while (node != NULL) {
-        if (strcmp(node->key, key) == 0) {
+        if (memcmp(node->key, key, key_len) == 0) {
             node->key = key;
+            node->key_len = key_len;
             node->val = val;
             return HDICT_OK;
         }
@@ -248,7 +250,7 @@ hdict_set(hdict_t *dict, char *key, void *val)
     }
 
     // new node if not found
-    hdict_node_t *new_node = hdict_node_new(key, val);
+    hdict_node_t *new_node = hdict_node_new(key, key_len, val);
 
     if (new_node == NULL)
         return HDICT_ENOMEM;
@@ -272,15 +274,15 @@ hdict_set(hdict_t *dict, char *key, void *val)
  * Get val from dict by key.
  */
 void *
-hdict_get(hdict_t *dict, char *key)
+hdict_get(hdict_t *dict, uint8_t *key, size_t key_len)
 {
     assert(dict != NULL);
 
-    size_t index = get_table_index(dict->table_size_index, key);
+    size_t index = get_table_index(dict->table_size_index, key, key_len);
     hdict_node_t *node = (dict->table)[index];
 
     while (node != NULL) {
-        if (strcmp(node->key, key) == 0)
+        if (memcmp(node->key, key, key_len) == 0)
             return node->val;
         node = node->next;
     }
@@ -292,15 +294,15 @@ hdict_get(hdict_t *dict, char *key)
  * Test if a key is in the dict.
  */
 int
-hdict_has(hdict_t *dict, char *key)
+hdict_has(hdict_t *dict, uint8_t *key, size_t key_len)
 {
     assert(dict != NULL);
 
-    size_t index = get_table_index(dict->table_size_index, key);
+    size_t index = get_table_index(dict->table_size_index, key, key_len);
     hdict_node_t *node = (dict->table)[index];
 
     while (node != NULL) {
-        if (strcmp(node->key, key) == 0)
+        if (memcmp(node->key, key, key_len) == 0)
             return HDICT_OK;
         node = node->next;
     }
@@ -312,16 +314,16 @@ hdict_has(hdict_t *dict, char *key)
  * Del val from dict by key.
  */
 int
-hdict_del(hdict_t *dict, char *key)
+hdict_del(hdict_t *dict, uint8_t *key, size_t key_len)
 {
     assert(dict != NULL);
 
-    size_t index = get_table_index(dict->table_size_index, key);
+    size_t index = get_table_index(dict->table_size_index, key, key_len);
     hdict_node_t *node = (dict->table)[index];
     hdict_node_t *prev = NULL;
 
     while (node != NULL) {
-        if (strcmp(node->key, key) == 0) {
+        if (memcmp(node->key, key, key_len) == 0) {
             if (prev == NULL)
                 // if the first node
                 (dict->table)[index] = node->next;

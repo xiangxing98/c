@@ -19,8 +19,10 @@
  */
 
 #ifndef __HDICT_H
+
+#include <memory.h>
+#include <stdint.h>
 #include <stdlib.h>
-#include <string.h>
 #include <assert.h>
 
 #ifdef __cplusplus
@@ -36,7 +38,8 @@ typedef enum {
 } hdict_error_t;
 
 typedef struct hdict_node_st {
-    char *key;
+    uint8_t *key;
+    size_t key_len;
     void *val;
     struct hdict_node_st *next;
 } hdict_node_t;
@@ -50,10 +53,10 @@ typedef struct {
 hdict_t *hdict_new();
 void hdict_free(hdict_t *);
 void hdict_clear(hdict_t *);
-int hdict_set(hdict_t *, char *, void *);
-void *hdict_get(hdict_t *, char *);
-int hdict_has(hdict_t *, char *);
-int hdict_del(hdict_t *, char *);
+int hdict_set(hdict_t *, uint8_t *, size_t, void *);
+void *hdict_get(hdict_t *, uint8_t *, size_t);
+int hdict_has(hdict_t *, uint8_t *, size_t);
+int hdict_del(hdict_t *, uint8_t *, size_t);
 
 #ifdef __cplusplus
 }
