@@ -19,7 +19,9 @@
  */
 
 #ifndef __HDICT_H
+#include <stdint.h>
 #include <stdlib.h>
+#include <string.h>
 #include <assert.h>
 
 #ifdef __cplusplus
@@ -35,24 +37,23 @@ typedef enum {
 } hdict_error_t;
 
 typedef struct hdict_node_st {
-    void *key;
+    char *key;
     void *val;
     struct hdict_node_st *next;
 } hdict_node_t;
 
-typeof struct {
-    bucket_t **table;                /* buckets table */
+typedef struct {
+    hdict_node_t **table;            /* buckets table */
     size_t size;                     /* buckets table size */
     size_t table_size_index;         /* index in table_sizes */
-    int (* keycmp)(void *, void *);  /* like strcmp */
 } hdict_t;
 
-hdict_t *hdict_new(int (*)(void *, void *));
+hdict_t *hdict_new();
 void hdict_free(hdict_t *);
 void hdict_clear(hdict_t *);
-int hdict_set(hdict_t *, void *, void *);
-void *hdict_get(hdict_t *, void *);
-int hdict_del(hdict_t *, void *);
+int hdict_set(hdict_t *, char *, void *);
+void *hdict_get(hdict_t *, char *);
+int hdict_del(hdict_t *, char *);
 
 #ifdef __cplusplus
 }
