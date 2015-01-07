@@ -328,6 +328,7 @@ hdict_del(hdict_t *dict, char *key)
             else
                 prev->next = node->next;
             free(node);
+            dict->size -= 1;
             return HDICT_OK;
         }
 
