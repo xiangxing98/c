@@ -207,12 +207,13 @@ hdict_clear(hdict_t *dict)
 
         while (node != NULL) {
             hdict_node_t *next_node = node->next;
-            free(node);
+            hdict_node_free(node);
+            dict->size -= 1;
             node = next_node;
         }
-    }
 
-    free(dict->table);
+        (dict->table)[index] = NULL;
+    }
 }
 
 /**
@@ -221,6 +222,9 @@ hdict_clear(hdict_t *dict)
 void hdict_free(hdict_t *dict)
 {
     hdict_clear(dict);
+
+    if (dict->table != NULL)
+        free(dict->table);
     if (dict != NULL)
         free(dict);
 }
