@@ -348,19 +348,29 @@ hdict_del(hdict_t *dict, uint8_t *key, size_t key_len)
 }
 
 /**
+ * Get dict size.
+ */
+size_t
+hdict_size(hdict_t *dict)
+{
+    assert(dict != NULL);
+    return dict->size;
+}
+
+/**
  * New dict iterator.
  */
 hdict_iterator_t *
 hdict_iterator_new(hdict_t *dict)
 {
-    assert(dict != NULL && dict->table != NULL);
+    assert(dict != NULL);
 
     hdict_iterator_t *iterator = malloc(sizeof(hdict_iterator_t));
 
     if (iterator != NULL) {
-        iterator->node = (dict->table)[0];
+        iterator->node = NULL;
         iterator->index = 0;
-        iterator->table_size_index = dict->table_size_index;
+        iterator->dict = dict;
     }
     return iterator;
 }
@@ -382,5 +392,38 @@ int
 hdict_iterator_next(hdict_iterator_t *iterator, uint8_t **key_addr, \
         size_t *key_len_addr, void **val_addr)
 {
-    // TODO
+    assert(iterator != NULL && iterator->dict != NULL &&
+            iterator->dict->table != NULL &&
+            iterator->dict->table_size_index <= table_size_index_max);
+
+    size_t table_size = table_sizes[iterator->dict->table_size_index];
+
+    // seek to a Non-NULL node
+    while(iterator->node == NULL) {
+        if (iterator->index == table_size)
+            return HDICT_ENOTFOUND;
+        iterator->node = (iterator->dict->table)[iterator->index++];
+    }
+
+    // fetch data
+    *key_addr = iterator->node->key;
+    *key_len_addr = iterator->node->key_len;
+    *val_addr = iterator->node->val;
+
+    // go to next node
+    iterator->node = iterator->node->next;
+
+    return HDICT_OK;
+}
+
+/**
+ * Reset a dict iterator.
+ */
+void
+hdict_iterator_reset(hdict_iterator_t *iterator)
+{
+    assert(iterator != NULL);
+
+    iterator->node = NULL;
+    iterator->index = 0;
 }

@@ -11,7 +11,7 @@ static void test_case(const char *, case_t);
 void case_hdict_new();
 void case_hdict_free();
 void case_hdict_clear();
-void case_hdict_set_get_del_has();
+void case_hdict_set_get_del_has_size();
 
 int main(int argc, const char *argv[])
 {
@@ -22,7 +22,7 @@ int main(int argc, const char *argv[])
     test_case("hdict_new", &case_hdict_new);
     test_case("hdict_free", &case_hdict_free);
     test_case("hdict_clear", &case_hdict_clear);
-    test_case("hdict_set_get_del_hash", &case_hdict_set_get_del_has);
+    test_case("hdict_set_get_del_has_size", &case_hdict_set_get_del_has_size);
     return 0;
 }
 
@@ -68,7 +68,7 @@ case_hdict_clear()
 }
 
 void
-case_hdict_set_get_del_has()
+case_hdict_set_get_del_has_size()
 {
     int val1 = 1, val2 = 2, val3 = 3, val4 = 4, val5 = 5,
         val6 = 6, val7 = 7, val8 = 8, val9 = 9;
@@ -114,6 +114,8 @@ case_hdict_set_get_del_has()
     assert(hdict_has(dict, (uint8_t *)key8, strlen(key8)) == HDICT_OK);
     assert(hdict_has(dict, (uint8_t *)key9, strlen(key9)) == HDICT_OK);
 
+    assert(hdict_size(dict) == 9);
+
     /* hdict_del */
     assert(hdict_del(dict, (uint8_t *)key1, strlen(key1)) == HDICT_OK);
     assert(hdict_del(dict, (uint8_t *)key2, strlen(key2)) == HDICT_OK);
@@ -125,6 +127,20 @@ case_hdict_set_get_del_has()
     assert(hdict_has(dict, (uint8_t *)key4, strlen(key4)) == HDICT_ENOTFOUND);
 
     assert(dict->size == 5 && dict->table != NULL);
+
+    assert(hdict_size(dict) == 5);
+
+    hdict_iterator_t *iterator = hdict_iterator_new(dict);
+
+    uint8_t *key;
+    size_t key_len;
+    void *val;
+
+    while (hdict_iterator_next(iterator, &key, &key_len, &val) == HDICT_OK) {
+        printf("%.*s => %d\n", (int)key_len, key, *(int *)val);
+    }
+
+    hdict_iterator_free(iterator);
 
     hdict_free(dict);
 }

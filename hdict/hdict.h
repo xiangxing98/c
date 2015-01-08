@@ -52,8 +52,8 @@ typedef struct hdict_st {
 
 typedef struct hdict_iterator_st {
     hdict_node_t *node;
+    hdict_t *dict;
     size_t index;
-    size_t table_size_index;
 } hdict_iterator_t;
 
 hdict_t *hdict_new();
@@ -66,6 +66,7 @@ int hdict_del(hdict_t *, uint8_t *, size_t);
 hdict_iterator_t *hdict_iterator_new(hdict_t *);
 void hdict_iterator_free(hdict_iterator_t *);
 int hdict_iterator_next(hdict_iterator_t *, uint8_t **, size_t *, void **);
+void hdict_iterator_reset(hdict_iterator_t *);
 
 #ifdef __cplusplus
 }
