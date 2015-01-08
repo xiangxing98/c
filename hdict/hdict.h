@@ -63,6 +63,7 @@ int hdict_set(hdict_t *, uint8_t *, size_t, void *);
 void *hdict_get(hdict_t *, uint8_t *, size_t);
 int hdict_has(hdict_t *, uint8_t *, size_t);
 int hdict_del(hdict_t *, uint8_t *, size_t);
+size_t hdict_size(hdict_t *);
 hdict_iterator_t *hdict_iterator_new(hdict_t *);
 void hdict_iterator_free(hdict_iterator_t *);
 int hdict_iterator_next(hdict_iterator_t *, uint8_t **, size_t *, void **);

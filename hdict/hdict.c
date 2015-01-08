@@ -47,7 +47,8 @@ static size_t table_sizes[] = {
     2147483647
 };
 
-static size_t table_size_index_max = sizeof(table_sizes) / sizeof(table_sizes[0]) - 1;  // 28
+static size_t table_size_index_max = sizeof(table_sizes) / \
+                                     sizeof(table_sizes[0]) - 1;  // 28
 
 /**
  * BKDRHash
