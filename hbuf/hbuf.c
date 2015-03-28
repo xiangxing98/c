@@ -134,7 +134,7 @@ hbuf_putc(hbuf_t *buf, char ch)
 void
 hbuf_print(hbuf_t *buf)
 {
-    printf("%.*s\n", (int)buf->size, buf->data);
+    printf("%.*s", (int)buf->size, buf->data);
 }
 
 /**
