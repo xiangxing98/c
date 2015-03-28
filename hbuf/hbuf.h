@@ -51,6 +51,7 @@ void hbuf_clear(hbuf_t *);
 int hbuf_grow(hbuf_t *, size_t);
 char *hbuf_str(hbuf_t *);
 void hbuf_print(hbuf_t *);
+void hbuf_println(hbuf_t *);
 int hbuf_put(hbuf_t *, uint8_t *, size_t);
 int hbuf_putc(hbuf_t *, char);
 int hbuf_puts(hbuf_t *, char *);

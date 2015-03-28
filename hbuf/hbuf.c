@@ -138,6 +138,15 @@ hbuf_print(hbuf_t *buf)
 }
 
 /**
+ * Print buf to stdout (with '\n')
+ */
+void
+hbuf_println(hbuf_t *buf)
+{
+    printf("%.*s\n", (int)buf->size, buf->data);
+}
+
+/**
  * Put data to buf, O(n)
  */
 int
