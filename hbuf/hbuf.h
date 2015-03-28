@@ -19,6 +19,7 @@
 #define __HBUF_H
 
 #include <assert.h>
+#include <stdarg.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -33,6 +34,7 @@ extern "C" {
 typedef enum {
     HBUF_OK = 0,
     HBUF_ENOMEM = 1,
+    HBUF_EFAILED = 2,
 } hbuf_error_t;
 
 typedef struct hbuf_st {
@@ -54,6 +56,7 @@ int hbuf_putc(hbuf_t *, char);
 int hbuf_puts(hbuf_t *, char *);
 void hbuf_lrm(hbuf_t *, size_t);
 void hbuf_rrm(hbuf_t *, size_t);
+int hbuf_sprintf(hbuf_t *, const char *, ...);
 
 #ifdef __cplusplus
 }

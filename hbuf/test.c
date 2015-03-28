@@ -22,6 +22,7 @@ void case_hbuf_putc();
 void case_hbuf_puts();
 void case_hbuf_lrm();
 void case_hbuf_rrm();
+void case_hbuf_sprintf();
 
 int main(int argc, const char *argv[])
 {
@@ -38,6 +39,7 @@ int main(int argc, const char *argv[])
     test_case("hbuf_puts", &case_hbuf_puts);
     test_case("hbuf_lrm", &case_hbuf_lrm);
     test_case("hbuf_rrm", &case_hbuf_rrm);
+    test_case("hbuf_sprintf", &case_hbuf_sprintf);
     return 0;
 }
 
@@ -147,5 +149,15 @@ case_hbuf_rrm()
     assert(strcmp(hbuf_str(buf), "hello") == 0);
     hbuf_rrm(buf, 100);
     assert(strcmp(hbuf_str(buf), "") == 0);
+    hbuf_free(buf);
+}
+
+void
+case_hbuf_sprintf()
+{
+    hbuf_t *buf = hbuf_new(HBUF_UNIT);
+    hbuf_sprintf(buf, "Hello %s!", "World");
+    assert(buf->size == 12);
+    assert(strcmp(hbuf_str(buf), "Hello World!") == 0);
     hbuf_free(buf);
 }

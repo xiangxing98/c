@@ -195,3 +195,44 @@ hbuf_rrm(hbuf_t *buf, size_t size)
     }
     buf->size -= size;
 }
+
+/**
+ * Formatted printing to a buffer.
+ */
+int
+hbuf_sprintf(hbuf_t *buf, const char *fmt, ...)
+{
+    assert(buf != NULL && buf->unit != 0);
+
+    if (buf->size >= buf->cap &&
+            hbuf_grow(buf, buf->size + 1) != HBUF_OK)
+        return HBUF_ENOMEM;
+
+    va_list ap;
+    int num;
+
+    va_start(ap, fmt);
+    num = vsnprintf((char *)buf->data + buf->size,
+            buf->cap - buf->size, fmt, ap);
+    va_end(ap);
+
+    if (num < 0)
+        return HBUF_EFAILED;
+
+    size_t size = (size_t)num;
+
+    if (size >= buf->cap - buf->size) {
+        if (hbuf_grow(buf, buf->size + size + 1) != HBUF_OK)
+            return HBUF_ENOMEM;
+        va_start(ap, fmt);
+        num = vsnprintf((char *)buf->data + buf->size,
+                buf->cap - buf->size, fmt, ap);
+        va_end(ap);
+    }
+
+    if (num < 0)
+        return HBUF_EFAILED;
+
+    buf->size += num;
+    return HBUF_OK;
+}
