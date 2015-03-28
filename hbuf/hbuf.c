@@ -40,10 +40,11 @@ hbuf_new(size_t unit)
 void
 hbuf_free(hbuf_t *buf)
 {
-    if (buf->data != NULL)
-        free(buf->data);
-    if (buf != NULL)
+    if (buf != NULL) {
+        if (buf->data != NULL)
+            free(buf->data);
         free(buf);
+    }
 }
 
 
