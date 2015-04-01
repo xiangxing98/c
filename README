@@ -7,6 +7,12 @@ My C Practice
 * hlist (double linked)
 * hdict (bkdrhash based)
 
+todo:
+
+* hfile (file io)
+* hnet (tcp/udp/unix sock)
+* he (event loop)
+
 -------
 Copyright (c) 2015, Chao Wang (hit9 <hit9@icloud.com>)
 
