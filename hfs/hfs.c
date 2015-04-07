@@ -14,37 +14,25 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-/**
- * File handling utils.
- */
+#include "hfs.h"
 
-#ifndef __HFS_H
-#define __HFS_H
-
-#include <assert.h>
-#include <errno.h>
-#include <stdio.h>
-#include <stdlib.h>
-
-#include "hbuf.h"
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-#define HFS_BUF_UNIT 128
-#define HFS_FILE_BUF_UNIT 1024
-
-typedef FILE hfs_t;
-
-hfs_t *hfs_open(const char *, const char *);
-int hfs_close(hfs_t *);
-int hfs_touch(const char *);
-int hfs_read(hbuf_t *, const char *);
-int hfs_write(const char *, hbuf_t *);
-
-#ifdef __cplusplus
+hfs_t *
+hfs_open(const char *filename, const char *mode)
+{
+    return fopen(filename, mode);
 }
-#endif
 
-#endif
+int
+hfs_close(hfs_t *stream)
+{
+    return fclose(stream);
+}
+
+int
+hfs_touch(const char * filename)
+{
+    hfs_t *stream = hfs_open(filename, "w");
+    if (stream == NULL)
+        return errno;
+    return hfs_close(stream);
+}
