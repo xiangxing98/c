@@ -1,4 +1,7 @@
 # vim:set noet:
 
+all:
+	make all -C t
+
 %:
-	make $@ -C src
+	make $@ -C t

@@ -26,4 +26,4 @@ test: all
 	$(foreach name, $(TARGETS), $(call runtest, $(name)))
 
 %:
-	$(CC) t_$@.c $@.c -o $@ $(CFLAGS)
+	$(CC) t_$@.c ../src/$@.c -o $@ $(CFLAGS) -I ../src

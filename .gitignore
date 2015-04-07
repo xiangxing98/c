@@ -5,8 +5,8 @@
 *.out
 *.log
 *.dSYM
-src/hbuf
-src/hstack
-src/hqueue
-src/hlist
-src/hdict
+t/hbuf
+t/hstack
+t/hqueue
+t/hlist
+t/hdict
