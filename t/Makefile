@@ -22,6 +22,6 @@ clean:
 	rm -f $(TARGETS) 
 	rm -f $(TARGETS:=.log)
 
-%:
+%: t_%.c ../src/%.c ../src/%.h
 	$(CC) t_$@.c ../src/$@.c -o $@ $(CFLAGS) -I ../src
 	$(call runtest, $@)

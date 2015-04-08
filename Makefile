@@ -1,7 +1,6 @@
 # vim:set noet:
 
-all:
-	make all -C t
+default: all
 
-%:
+.DEFAULT:
 	make $@ -C t
