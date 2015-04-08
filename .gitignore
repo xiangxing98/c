@@ -5,8 +5,8 @@
 *.out
 *.log
 *.dSYM
-hbuf/hbuf
-hstack/hstack
-hqueue/hqueue
-hlist/hlist
-hdict/hdict
+t/hbuf
+t/hstack
+t/hqueue
+t/hlist
+t/hdict
