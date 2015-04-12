@@ -27,7 +27,5 @@ clean:
 	$(call runtest, $@)
 
 hfs: t_hfs.c ../src/hfs.c ../src/hfs.h ../src/hbuf.c ../src/hbuf.h
-	touch hfs_open hfs_close
 	$(CC) t_hfs.c ../src/hfs.c ../src/hbuf.c -o hfs $(CFLAGS) -I../src
 	$(call runtest, hfs)
-	rm -rf hfs_*

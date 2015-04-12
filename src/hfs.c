@@ -20,9 +20,9 @@
  * Open a file stream.
  */
 hfs_t *
-hfs_open(const char *filename, const char *mode)
+hfs_open(const char *path, const char *mode)
 {
-    return fopen(filename, mode);
+    return fopen(path, mode);
 }
 
 /**
@@ -38,12 +38,23 @@ hfs_close(hfs_t *stream)
  * Touch a file.
  */
 int
-hfs_touch(const char *filename)
+hfs_touch(const char *path)
 {
-    hfs_t *stream = hfs_open(filename, "w");
+    hfs_t *stream = hfs_open(path, "w");
     if (stream == NULL)
         return HFS_EFILE;
     return hfs_close(stream);
+}
+
+/**
+ * Remove a file.
+ */
+int
+hfs_remove(const char *path)
+{
+    if (remove(path) != 0)
+        return HFS_EFILE;
+    return HFS_OK;
 }
 
 /**

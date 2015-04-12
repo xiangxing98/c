@@ -13,6 +13,7 @@ typedef void (*case_t)();
 void case_hfs_open();
 void case_hfs_close();
 void case_hfs_touch();
+void case_hfs_remove();
 
 static void test_case(const char *, case_t);
 
@@ -24,6 +25,7 @@ int main(int argc, const char *argv[])
     test_case("hfs_open", &case_hfs_open);
     test_case("hfs_close", &case_hfs_close);
     test_case("hfs_touch", &case_hfs_touch);
+    test_case("hfs_remove", &case_hfs_remove);
     return 0;
 }
 
@@ -37,20 +39,36 @@ test_case(const char *name, case_t case_func)
 void
 case_hfs_open()
 {
-    hfs_t *stream = hfs_open("hfs_open", "r");
+    assert(hfs_touch("hfs_") == HFS_OK);
+
+    hfs_t *stream = hfs_open("hfs_", "r");
     assert(stream != NULL);
     hfs_close(stream);
+
+    assert(hfs_remove("hfs_") == HFS_OK);
 }
 
 void
 case_hfs_close()
 {
-    hfs_t *stream = hfs_open("hfs_close", "r");
+    assert(hfs_touch("hfs_") == HFS_OK);
+
+    hfs_t *stream = hfs_open("hfs_", "r");
     hfs_close(stream);
+
+    assert(hfs_remove("hfs_") == HFS_OK);
 }
 
 void
 case_hfs_touch()
 {
-    assert(hfs_touch("hfs_touch") == HFS_OK);
+    assert(hfs_touch("hfs_") == HFS_OK);
+    assert(hfs_remove("hfs_") == HFS_OK);
+}
+
+void
+case_hfs_remove()
+{
+    assert(hfs_touch("hfs_") == HFS_OK);
+    assert(hfs_remove("hfs_") == HFS_OK);
 }

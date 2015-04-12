@@ -46,6 +46,7 @@ typedef enum {
 hfs_t *hfs_open(const char *, const char *);
 int hfs_close(hfs_t *);
 int hfs_touch(const char *);
+int hfs_remove(const char *);
 int hfs_read(hbuf_t *, const char *, size_t);
 int hfs_write(const char *, hbuf_t *);
 int hfs_append(const char *, hbuf_t *);
