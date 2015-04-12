@@ -10,3 +10,5 @@ t/hstack
 t/hqueue
 t/hlist
 t/hdict
+t/hfs
+t/hfs_*

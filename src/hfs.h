@@ -16,6 +16,9 @@
 
 /**
  * File handling utils.
+ *
+ * if (hfs_touch(..) == HFS_EFILE)
+ *   printf("%s", strerror(errno));
  */
 
 #ifndef __HFS_H
@@ -32,16 +35,20 @@
 extern "C" {
 #endif
 
-#define HFS_BUF_UNIT 128
-#define HFS_FILE_BUF_UNIT 1024
-
 typedef FILE hfs_t;
+
+typedef enum {
+    HFS_OK = 0,
+    HFS_EFILE = 1,
+    HFS_ENOMEM = 2,
+} hfs_error_t;
 
 hfs_t *hfs_open(const char *, const char *);
 int hfs_close(hfs_t *);
 int hfs_touch(const char *);
-int hfs_read(hbuf_t *, const char *);
+int hfs_read(hbuf_t *, const char *, size_t);
 int hfs_write(const char *, hbuf_t *);
+int hfs_append(const char *, hbuf_t *);
 
 #ifdef __cplusplus
 }
