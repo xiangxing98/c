@@ -104,15 +104,15 @@ case_hdict_set_get_del_has_size()
     assert(hdict_get(dict, (uint8_t *)key9, strlen(key9)) == &val9);
 
     /* hdict_has */
-    assert(hdict_has(dict, (uint8_t *)key1, strlen(key1)) == HDICT_OK);
-    assert(hdict_has(dict, (uint8_t *)key2, strlen(key2)) == HDICT_OK);
-    assert(hdict_has(dict, (uint8_t *)key3, strlen(key3)) == HDICT_OK);
-    assert(hdict_has(dict, (uint8_t *)key4, strlen(key4)) == HDICT_OK);
-    assert(hdict_has(dict, (uint8_t *)key5, strlen(key5)) == HDICT_OK);
-    assert(hdict_has(dict, (uint8_t *)key6, strlen(key6)) == HDICT_OK);
-    assert(hdict_has(dict, (uint8_t *)key7, strlen(key7)) == HDICT_OK);
-    assert(hdict_has(dict, (uint8_t *)key8, strlen(key8)) == HDICT_OK);
-    assert(hdict_has(dict, (uint8_t *)key9, strlen(key9)) == HDICT_OK);
+    assert(hdict_has(dict, (uint8_t *)key1, strlen(key1)) == true);
+    assert(hdict_has(dict, (uint8_t *)key2, strlen(key2)) == true);
+    assert(hdict_has(dict, (uint8_t *)key3, strlen(key3)) == true);
+    assert(hdict_has(dict, (uint8_t *)key4, strlen(key4)) == true);
+    assert(hdict_has(dict, (uint8_t *)key5, strlen(key5)) == true);
+    assert(hdict_has(dict, (uint8_t *)key6, strlen(key6)) == true);
+    assert(hdict_has(dict, (uint8_t *)key7, strlen(key7)) == true);
+    assert(hdict_has(dict, (uint8_t *)key8, strlen(key8)) == true);
+    assert(hdict_has(dict, (uint8_t *)key9, strlen(key9)) == true);
 
     assert(hdict_size(dict) == 9);
 
@@ -121,10 +121,10 @@ case_hdict_set_get_del_has_size()
     assert(hdict_del(dict, (uint8_t *)key2, strlen(key2)) == HDICT_OK);
     assert(hdict_del(dict, (uint8_t *)key3, strlen(key3)) == HDICT_OK);
     assert(hdict_del(dict, (uint8_t *)key4, strlen(key4)) == HDICT_OK);
-    assert(hdict_has(dict, (uint8_t *)key1, strlen(key1)) == HDICT_ENOTFOUND);
-    assert(hdict_has(dict, (uint8_t *)key2, strlen(key2)) == HDICT_ENOTFOUND);
-    assert(hdict_has(dict, (uint8_t *)key3, strlen(key3)) == HDICT_ENOTFOUND);
-    assert(hdict_has(dict, (uint8_t *)key4, strlen(key4)) == HDICT_ENOTFOUND);
+    assert(hdict_has(dict, (uint8_t *)key1, strlen(key1)) == false);
+    assert(hdict_has(dict, (uint8_t *)key2, strlen(key2)) == false);
+    assert(hdict_has(dict, (uint8_t *)key3, strlen(key3)) == false);
+    assert(hdict_has(dict, (uint8_t *)key4, strlen(key4)) == false);
 
     assert(dict->size == 5 && dict->table != NULL);
 
