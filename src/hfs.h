@@ -57,6 +57,8 @@ int hfs_isdir(const char *);
 int hfs_isfile(const char *);
 int hfs_rename(const char *, const char *);
 int hfs_mkdir(const char *, mode_t);
+int hfs_rmdir(const char *);
+int hfs_readdir(const char *);
 
 #ifdef __cplusplus
 }

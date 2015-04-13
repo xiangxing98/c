@@ -18,6 +18,13 @@ void case_hfs_remove();
 void case_hfs_read();
 void case_hfs_write();
 void case_hfs_append();
+void case_hfs_exists();
+void case_hfs_isdir();
+void case_hfs_isfile();
+void case_hfs_rename();
+void case_hfs_mkdir();
+void case_hfs_rename();
+void case_hfs_mkdir();
 
 static void test_case(const char *, case_t);
 
@@ -33,6 +40,11 @@ int main(int argc, const char *argv[])
     test_case("hfs_read", &case_hfs_read);
     test_case("hfs_write", &case_hfs_write);
     test_case("hfs_append", &case_hfs_append);
+    test_case("hfs_exists", &case_hfs_exists);
+    test_case("hfs_isdir", &case_hfs_isdir);
+    test_case("hfs_isfile", &case_hfs_isfile);
+    test_case("hfs_rename", &case_hfs_rename);
+    /* test_case("hfs_mkdir", &case_hfs_mkdir); */
     return 0;
 }
 
@@ -144,4 +156,47 @@ case_hfs_append()
     assert(hfs_remove("hfs_") == HFS_OK &&
             hfs_exists("hfs_") == false);
     hbuf_free(buf);
+}
+
+void
+case_hfs_exists()
+{
+    assert(hfs_exists("hfs_") == false);
+    assert(hfs_touch("hfs_") == HFS_OK &&
+            hfs_exists("hfs_") == true);
+}
+
+void
+case_hfs_isdir()
+{
+    assert(hfs_isdir("./") == true);
+    assert(hfs_isdir("./hfs_") == false);
+}
+
+void
+case_hfs_isfile()
+{
+    assert(hfs_isfile("./") == false);
+    assert(hfs_touch("hfs_") == HFS_OK &&
+            hfs_isfile("hfs_") == true);
+    assert(hfs_remove("hfs_") == HFS_OK);
+}
+
+void
+case_hfs_rename()
+{
+    assert(hfs_touch("hfs_") == HFS_OK &&
+            hfs_isfile("hfs_") == true);
+    assert(hfs_rename("hfs_", "hfs__") == HFS_OK &&
+            hfs_exists("hfs_") == false &&
+            hfs_exists("hfs__") == true);
+    assert(hfs_remove("hfs__") == HFS_OK);
+}
+
+void
+case_hfs_mkdir()
+{
+    assert(hfs_mkdir("hfs_", 777) == HFS_OK);
+    assert(hfs_touch("hfs_/hfs") == HFS_OK);
+    assert(hfs_rmdir("hfs_") == HFS_OK);
 }

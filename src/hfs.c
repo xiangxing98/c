@@ -175,12 +175,23 @@ hfs_rename(const char *old, const char *new)
 }
 
 /**
- * Mkdir.
+ * Make a directory.
  */
 int
 hfs_mkdir(const char *path, mode_t mode)
 {
     if (mkdir(path, mode) != 0)
+        return HFS_EFILE;
+    return HFS_OK;
+}
+
+/**
+ * Remove a directory.
+ */
+int
+hfs_rmdir(const char *path)
+{
+    if (rmdir(path) != 0)
         return HFS_EFILE;
     return HFS_OK;
 }
