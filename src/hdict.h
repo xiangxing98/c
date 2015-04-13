@@ -25,6 +25,8 @@
 #include <stdlib.h>
 #include <assert.h>
 
+#include "hbool.h"
+
 #ifdef __cplusplus
 extern "C" {
 #endif

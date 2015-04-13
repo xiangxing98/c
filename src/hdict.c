@@ -310,11 +310,11 @@ hdict_has(hdict_t *dict, uint8_t *key, size_t key_len)
 
     while (node != NULL) {
         if (memcmp(node->key, key, key_len) == 0)
-            return HDICT_OK;
+            return true;
         node = node->next;
     }
 
-    return HDICT_ENOTFOUND;
+    return false;
 }
 
 /**
