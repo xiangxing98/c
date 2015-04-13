@@ -21,11 +21,13 @@ all: $(TARGETS)
 clean:
 	rm -f $(TARGETS)
 	rm -f $(TARGETS:=.log)
+	rm -f $(TARGETS:=.o)
 
-%: t_%.c ../src/%.c ../src/%.h
+%: t_%.c ../src/%.c ../src/%.h ../src/hbool.h
 	$(CC) t_$@.c ../src/$@.c -o $@ $(CFLAGS) -I../src
 	$(call runtest, $@)
 
-hfs: t_hfs.c ../src/hfs.c ../src/hfs.h ../src/hbuf.c ../src/hbuf.h
+hfs: t_hfs.c ../src/hfs.c ../src/hfs.h ../src/hbuf.c ../src/hbuf.h \
+	../src/hbool.h
 	$(CC) t_hfs.c ../src/hfs.c ../src/hbuf.c -o hfs $(CFLAGS) -I../src
 	$(call runtest, hfs)

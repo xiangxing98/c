@@ -28,8 +28,10 @@
 #include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <sys/stat.h>
 
 #include "hbuf.h"
+#include "hbool.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -50,6 +52,11 @@ int hfs_remove(const char *);
 int hfs_read(hbuf_t *, const char *, size_t);
 int hfs_write(const char *, hbuf_t *);
 int hfs_append(const char *, hbuf_t *);
+int hfs_exists(const char *);
+int hfs_isdir(const char *);
+int hfs_isfile(const char *);
+int hfs_rename(const char *, const char *);
+int hfs_mkdir(const char *, mode_t);
 
 #ifdef __cplusplus
 }

@@ -124,3 +124,63 @@ hfs_append(const char *path, hbuf_t *buf)
 {
     return _hfs_write(path, buf, "a");
 }
+
+/**
+ * Test if path exists.
+ */
+int
+hfs_exists(const char *path)
+{
+    struct stat st;
+    if (stat(path, &st) == 0)
+        return true;
+    return false;
+}
+
+/**
+ * Test if path is a directory.
+ */
+int
+hfs_isdir(const char *path)
+{
+    struct stat st;
+
+    if (stat(path, &st) == 0 && (st.st_mode & S_IFDIR))
+        return true;
+    return false;
+}
+
+/**
+ * Test if path is a file.
+ */
+int
+hfs_isfile(const char *path)
+{
+    struct stat st;
+
+    if(stat(path, &st) == 0 && (st.st_mode & S_IFREG))
+        return true;
+    return false;
+}
+
+/**
+ * Rename file/directory.
+ */
+int
+hfs_rename(const char *old, const char *new)
+{
+    if (rename(old, new) != 0)
+        return HFS_EFILE;
+    return HFS_OK;
+}
+
+/**
+ * Mkdir.
+ */
+int
+hfs_mkdir(const char *path, mode_t mode)
+{
+    if (mkdir(path, mode) != 0)
+        return HFS_EFILE;
+    return HFS_OK;
+}
