@@ -14,7 +14,25 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
+#ifndef __HBOOL_H
+#define __HBOOL_H
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#if __STDC_VERSION__ >= 199901L
+// c99
+#include <stdbool.h>
+#else
 typedef enum {
     false = 0,
     true = 1,
 } hbool_t;
+#endif
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif
