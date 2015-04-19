@@ -18,58 +18,58 @@
  * BKDRHash hashtable implementation (list based).
  */
 
-#ifndef __HDICT_H
+#ifndef __DICT_H
 
 #include <memory.h>
 #include <stdint.h>
 #include <stdlib.h>
 #include <assert.h>
 
-#include "hbool.h"
+#include "bool.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-#define HDICT_LOAD_LIMIT 0.75 // load factor limit
+#define DICT_LOAD_LIMIT 0.75 // load factor limit
 
 typedef enum {
-    HDICT_OK = 0,
-    HDICT_ENOMEM = -1,      /* No memory error */
-    HDICT_ENOTFOUND = -2,   /* Key was not found */
-} hdict_error_t;
+    DICT_OK = 0,
+    DICT_ENOMEM = -1,      /* No memory error */
+    DICT_ENOTFOUND = -2,   /* Key was not found */
+} dict_error_t;
 
-typedef struct hdict_node_st {
+typedef struct dict_node_st {
     uint8_t *key;
     size_t key_len;
     void *val;
-    struct hdict_node_st *next;
-} hdict_node_t;
+    struct dict_node_st *next;
+} dict_node_t;
 
-typedef struct hdict_st {
-    hdict_node_t **table;            /* buckets table */
+typedef struct dict_st {
+    dict_node_t **table;            /* buckets table */
     size_t size;                     /* buckets table size */
     size_t table_size_index;         /* index in table_sizes */
-} hdict_t;
+} dict_t;
 
-typedef struct hdict_iterator_st {
-    hdict_node_t *node;
-    hdict_t *dict;
+typedef struct dict_iterator_st {
+    dict_node_t *node;
+    dict_t *dict;
     size_t index;
-} hdict_iterator_t;
+} dict_iterator_t;
 
-hdict_t *hdict_new();
-void hdict_free(hdict_t *);
-void hdict_clear(hdict_t *);
-int hdict_set(hdict_t *, uint8_t *, size_t, void *);
-void *hdict_get(hdict_t *, uint8_t *, size_t);
-int hdict_has(hdict_t *, uint8_t *, size_t);
-int hdict_del(hdict_t *, uint8_t *, size_t);
-size_t hdict_size(hdict_t *);
-hdict_iterator_t *hdict_iterator_new(hdict_t *);
-void hdict_iterator_free(hdict_iterator_t *);
-int hdict_iterator_next(hdict_iterator_t *, uint8_t **, size_t *, void **);
-void hdict_iterator_reset(hdict_iterator_t *);
+dict_t *dict_new();
+void dict_free(dict_t *);
+void dict_clear(dict_t *);
+int dict_set(dict_t *, uint8_t *, size_t, void *);
+void *dict_get(dict_t *, uint8_t *, size_t);
+int dict_has(dict_t *, uint8_t *, size_t);
+int dict_del(dict_t *, uint8_t *, size_t);
+size_t dict_size(dict_t *);
+dict_iterator_t *dict_iterator_new(dict_t *);
+void dict_iterator_free(dict_iterator_t *);
+int dict_iterator_next(dict_iterator_t *, uint8_t **, size_t *, void **);
+void dict_iterator_reset(dict_iterator_t *);
 
 #ifdef __cplusplus
 }

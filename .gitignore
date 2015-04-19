@@ -9,6 +9,6 @@ t/buf
 t/hstack
 t/hqueue
 t/hlist
-t/hdict
+t/dict
 t/hfs
 t/hfs_*

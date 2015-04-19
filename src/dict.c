@@ -14,7 +14,7 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-#include "hdict.h"
+#include "dict.h"
 
 static size_t table_sizes[] = {
     7,
@@ -77,10 +77,10 @@ get_table_index(size_t table_size_index, uint8_t *key, size_t key_len)
 /**
  * New node.
  */
-hdict_node_t *
-hdict_node_new(uint8_t *key, size_t key_len, void *val)
+dict_node_t *
+dict_node_new(uint8_t *key, size_t key_len, void *val)
 {
-    hdict_node_t *node = malloc(sizeof(hdict_node_t));
+    dict_node_t *node = malloc(sizeof(dict_node_t));
 
     if (node != NULL) {
         node->key = key;
@@ -95,7 +95,7 @@ hdict_node_new(uint8_t *key, size_t key_len, void *val)
  * Free node.
  */
 void
-hdict_node_free(hdict_node_t *node)
+dict_node_free(dict_node_t *node)
 {
     if (node != NULL)
         free(node);
@@ -105,7 +105,7 @@ hdict_node_free(hdict_node_t *node)
  * Resize && Rehash
  */
 int
-hdict_resize(hdict_t *dict)
+dict_resize(dict_t *dict)
 {
     assert(dict != NULL &&
             dict->table_size_index <= table_size_index_max);
@@ -113,12 +113,12 @@ hdict_resize(hdict_t *dict)
     size_t new_table_size_index = dict->table_size_index + 1;
 
     if (new_table_size_index > table_size_index_max)
-        return HDICT_ENOMEM;
+        return DICT_ENOMEM;
 
     // new empty table
     size_t new_table_size = table_sizes[new_table_size_index];
-    hdict_node_t **new_table = malloc(new_table_size *
-            sizeof(hdict_node_t *));
+    dict_node_t **new_table = malloc(new_table_size *
+            sizeof(dict_node_t *));
 
     size_t index;
 
@@ -130,18 +130,18 @@ hdict_resize(hdict_t *dict)
     // for each bucket in table
     for (index = 0; index < table_size; index++) {
         // for each node in this bucket
-        hdict_node_t *node = (dict->table)[index];
+        dict_node_t *node = (dict->table)[index];
 
         while (node != NULL) {
-            hdict_node_t *new_node = hdict_node_new(node->key,
+            dict_node_t *new_node = dict_node_new(node->key,
                     node->key_len, node->val);
 
             if (new_node == NULL)
-                return HDICT_ENOMEM;
+                return DICT_ENOMEM;
 
             size_t new_index = get_table_index(
                     new_table_size_index, new_node->key, new_node->key_len);
-            hdict_node_t *cursor = new_table[new_index];
+            dict_node_t *cursor = new_table[new_index];
 
             if (cursor == NULL)
                 // set head node
@@ -153,8 +153,8 @@ hdict_resize(hdict_t *dict)
                 cursor->next = new_node;
             }
 
-            hdict_node_t *next_node = node->next;
-            hdict_node_free(node);
+            dict_node_t *next_node = node->next;
+            dict_node_free(node);
             node = next_node;
         }
     }
@@ -163,22 +163,22 @@ hdict_resize(hdict_t *dict)
 
     dict->table = new_table;
     dict->table_size_index = new_table_size_index;
-    return HDICT_OK;
+    return DICT_OK;
 }
 
 /**
  * New dict.
  */
-hdict_t *
-hdict_new()
+dict_t *
+dict_new()
 {
-    hdict_t *dict = malloc(sizeof(hdict_t));
+    dict_t *dict = malloc(sizeof(dict_t));
 
     if (dict != NULL) {
         dict->table_size_index = 0;
 
         size_t table_size = table_sizes[dict->table_size_index];
-        dict->table = malloc(table_size * sizeof(hdict_node_t *));
+        dict->table = malloc(table_size * sizeof(dict_node_t *));
 
         if (dict->table == NULL)
             return NULL;
@@ -196,7 +196,7 @@ hdict_new()
  * Clear dict.
  */
 void
-hdict_clear(hdict_t *dict)
+dict_clear(dict_t *dict)
 {
     assert(dict != NULL && dict->table_size_index <= table_size_index_max);
 
@@ -204,11 +204,11 @@ hdict_clear(hdict_t *dict)
     size_t table_size = table_sizes[dict->table_size_index];
 
     for (index = 0; index < table_size; index++) {
-        hdict_node_t *node = (dict->table)[index];
+        dict_node_t *node = (dict->table)[index];
 
         while (node != NULL) {
-            hdict_node_t *next_node = node->next;
-            hdict_node_free(node);
+            dict_node_t *next_node = node->next;
+            dict_node_free(node);
             dict->size -= 1;
             node = next_node;
         }
@@ -220,9 +220,9 @@ hdict_clear(hdict_t *dict)
 /**
  * Free dict.
  */
-void hdict_free(hdict_t *dict)
+void dict_free(dict_t *dict)
 {
-    hdict_clear(dict);
+    dict_clear(dict);
 
     if (dict->table != NULL)
         free(dict->table);
@@ -234,16 +234,16 @@ void hdict_free(hdict_t *dict)
  * Set a key to dict.
  */
 int
-hdict_set(hdict_t *dict, uint8_t *key, size_t key_len, void *val)
+dict_set(dict_t *dict, uint8_t *key, size_t key_len, void *val)
 {
     assert(dict != NULL);
 
-    if ((table_sizes[dict->table_size_index] * HDICT_LOAD_LIMIT < dict->size) &&
-            hdict_resize(dict) != HDICT_OK)
-        return HDICT_ENOMEM;
+    if ((table_sizes[dict->table_size_index] * DICT_LOAD_LIMIT < dict->size) &&
+            dict_resize(dict) != DICT_OK)
+        return DICT_ENOMEM;
 
     size_t index = get_table_index(dict->table_size_index, key, key_len);
-    hdict_node_t *node = (dict->table)[index];
+    dict_node_t *node = (dict->table)[index];
 
     // try to find this key
     while (node != NULL) {
@@ -251,16 +251,16 @@ hdict_set(hdict_t *dict, uint8_t *key, size_t key_len, void *val)
             node->key = key;
             node->key_len = key_len;
             node->val = val;
-            return HDICT_OK;
+            return DICT_OK;
         }
         node = node->next;
     }
 
     // new node if not found
-    hdict_node_t *new_node = hdict_node_new(key, key_len, val);
+    dict_node_t *new_node = dict_node_new(key, key_len, val);
 
     if (new_node == NULL)
-        return HDICT_ENOMEM;
+        return DICT_ENOMEM;
 
     node = (dict->table)[index]; // rewind to head
 
@@ -274,19 +274,19 @@ hdict_set(hdict_t *dict, uint8_t *key, size_t key_len, void *val)
         node->next = new_node;
     }
     dict->size += 1;
-    return HDICT_OK;
+    return DICT_OK;
 }
 
 /**
  * Get val from dict by key.
  */
 void *
-hdict_get(hdict_t *dict, uint8_t *key, size_t key_len)
+dict_get(dict_t *dict, uint8_t *key, size_t key_len)
 {
     assert(dict != NULL);
 
     size_t index = get_table_index(dict->table_size_index, key, key_len);
-    hdict_node_t *node = (dict->table)[index];
+    dict_node_t *node = (dict->table)[index];
 
     while (node != NULL) {
         if (memcmp(node->key, key, key_len) == 0)
@@ -301,12 +301,12 @@ hdict_get(hdict_t *dict, uint8_t *key, size_t key_len)
  * Test if a key is in the dict.
  */
 int
-hdict_has(hdict_t *dict, uint8_t *key, size_t key_len)
+dict_has(dict_t *dict, uint8_t *key, size_t key_len)
 {
     assert(dict != NULL);
 
     size_t index = get_table_index(dict->table_size_index, key, key_len);
-    hdict_node_t *node = (dict->table)[index];
+    dict_node_t *node = (dict->table)[index];
 
     while (node != NULL) {
         if (memcmp(node->key, key, key_len) == 0)
@@ -321,13 +321,13 @@ hdict_has(hdict_t *dict, uint8_t *key, size_t key_len)
  * Del val from dict by key.
  */
 int
-hdict_del(hdict_t *dict, uint8_t *key, size_t key_len)
+dict_del(dict_t *dict, uint8_t *key, size_t key_len)
 {
     assert(dict != NULL);
 
     size_t index = get_table_index(dict->table_size_index, key, key_len);
-    hdict_node_t *node = (dict->table)[index];
-    hdict_node_t *prev = NULL;
+    dict_node_t *node = (dict->table)[index];
+    dict_node_t *prev = NULL;
 
     while (node != NULL) {
         if (memcmp(node->key, key, key_len) == 0) {
@@ -338,21 +338,21 @@ hdict_del(hdict_t *dict, uint8_t *key, size_t key_len)
                 prev->next = node->next;
             free(node);
             dict->size -= 1;
-            return HDICT_OK;
+            return DICT_OK;
         }
 
         prev = node;
         node = node->next;
     }
 
-    return HDICT_ENOTFOUND;
+    return DICT_ENOTFOUND;
 }
 
 /**
  * Get dict size.
  */
 size_t
-hdict_size(hdict_t *dict)
+dict_size(dict_t *dict)
 {
     assert(dict != NULL);
     return dict->size;
@@ -361,12 +361,12 @@ hdict_size(hdict_t *dict)
 /**
  * New dict iterator.
  */
-hdict_iterator_t *
-hdict_iterator_new(hdict_t *dict)
+dict_iterator_t *
+dict_iterator_new(dict_t *dict)
 {
     assert(dict != NULL);
 
-    hdict_iterator_t *iterator = malloc(sizeof(hdict_iterator_t));
+    dict_iterator_t *iterator = malloc(sizeof(dict_iterator_t));
 
     if (iterator != NULL) {
         iterator->node = NULL;
@@ -380,7 +380,7 @@ hdict_iterator_new(hdict_t *dict)
  * Free dict iterator.
  */
 void
-hdict_iterator_free(hdict_iterator_t *iterator)
+dict_iterator_free(dict_iterator_t *iterator)
 {
     if (iterator != NULL)
         free(iterator);
@@ -390,7 +390,7 @@ hdict_iterator_free(hdict_iterator_t *iterator)
  * Get next key and val
  */
 int
-hdict_iterator_next(hdict_iterator_t *iterator, uint8_t **key_addr, \
+dict_iterator_next(dict_iterator_t *iterator, uint8_t **key_addr, \
         size_t *key_len_addr, void **val_addr)
 {
     assert(iterator != NULL && iterator->dict != NULL &&
@@ -402,7 +402,7 @@ hdict_iterator_next(hdict_iterator_t *iterator, uint8_t **key_addr, \
     // seek to a Non-NULL node
     while(iterator->node == NULL) {
         if (iterator->index == table_size)
-            return HDICT_ENOTFOUND;
+            return DICT_ENOTFOUND;
         iterator->node = (iterator->dict->table)[iterator->index++];
     }
 
@@ -414,14 +414,14 @@ hdict_iterator_next(hdict_iterator_t *iterator, uint8_t **key_addr, \
     // go to next node
     iterator->node = iterator->node->next;
 
-    return HDICT_OK;
+    return DICT_OK;
 }
 
 /**
  * Reset a dict iterator.
  */
 void
-hdict_iterator_reset(hdict_iterator_t *iterator)
+dict_iterator_reset(dict_iterator_t *iterator)
 {
     assert(iterator != NULL);
 
