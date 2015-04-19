@@ -1,17 +1,17 @@
 My C Practice
 -------------
 
-* hbuf (uint8_t buffer)
-* hstack (array based)
-* hqueue (list based)
-* hlist (double linked)
-* hdict (bkdrhash based)
+* buf (uint8_t buffer)
+* stack (array based)
+* queue (list based)
+* list (double linked)
+* dict (bkdrhash based)
+* fs
 
 todo:
 
-* hfile (file io)
-* hnet (tcp/udp/unix sock)
-* he (event loop)
+* net (tcp/udp/unix sock)
+* event (event loop)
 
 -------
 Copyright (c) 2015, Chao Wang (hit9 <hit9@icloud.com>)
