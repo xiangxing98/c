@@ -7,7 +7,7 @@
 *.dSYM
 t/buf
 t/hstack
-t/hqueue
+t/queue
 t/list
 t/dict
 t/fs

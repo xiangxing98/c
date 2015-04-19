@@ -14,15 +14,15 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-#include "hqueue.h"
+#include "queue.h"
 
 /**
  * New queue.
  */
-hqueue_t *
-hqueue_new(void)
+queue_t *
+queue_new(void)
 {
-    hqueue_t *queue = malloc(sizeof(hqueue_t));
+    queue_t *queue = malloc(sizeof(queue_t));
 
     if (queue != NULL) {
         queue->head = NULL;
@@ -36,10 +36,10 @@ hqueue_new(void)
  * Free queue.
  */
 void
-hqueue_free(hqueue_t *queue)
+queue_free(queue_t *queue)
 {
     if (queue != NULL) {
-        hqueue_clear(queue);
+        queue_clear(queue);
         free(queue);
     }
 }
@@ -48,18 +48,18 @@ hqueue_free(hqueue_t *queue)
  * Clear queue, O(n)
  */
 void
-hqueue_clear(hqueue_t *queue)
+queue_clear(queue_t *queue)
 {
     assert(queue != NULL);
-    while (hqueue_pop(queue) != NULL);
+    while (queue_pop(queue) != NULL);
 }
 
 /**
  * New queue node.
  */
-hqueue_node_t *
-hqueue_node_new(void *data) {
-    hqueue_node_t *node = malloc(sizeof(hqueue_node_t));
+queue_node_t *
+queue_node_new(void *data) {
+    queue_node_t *node = malloc(sizeof(queue_node_t));
 
     if (node != NULL) {
         node->next = NULL;
@@ -72,7 +72,7 @@ hqueue_node_new(void *data) {
  * Free queue node.
  */
 void
-hqueue_node_free(hqueue_node_t *node)
+queue_node_free(queue_node_t *node)
 {
     if (node != NULL)
         free(node);
@@ -82,14 +82,14 @@ hqueue_node_free(hqueue_node_t *node)
  * Push an item into queue, O(1);
  */
 int
-hqueue_push(hqueue_t *queue, void *item)
+queue_push(queue_t *queue, void *item)
 {
     assert(queue != NULL);
 
-    hqueue_node_t *node = hqueue_node_new(item);
+    queue_node_t *node = queue_node_new(item);
 
     if (node == NULL)
-        return HQUEUE_ENOMEM;
+        return QUEUE_ENOMEM;
 
     if (queue->size == 0) {
         assert(queue->head == NULL && queue->tail == NULL);
@@ -102,14 +102,14 @@ hqueue_push(hqueue_t *queue, void *item)
     }
 
     queue->size += 1;
-    return HQUEUE_OK;
+    return QUEUE_OK;
 }
 
 /**
  * Pop an item from queue, O(1);
  */
 void *
-hqueue_pop(hqueue_t *queue)
+queue_pop(queue_t *queue)
 {
     assert(queue != NULL);
 
@@ -118,13 +118,13 @@ hqueue_pop(hqueue_t *queue)
         return NULL;
     }
     assert(queue->head != NULL && queue->tail != NULL);
-    hqueue_node_t *head = queue->head;
+    queue_node_t *head = queue->head;
     void *data = head->data;
     queue->head = head->next;
     queue->size -= 1;
     if (queue->head == NULL)
         queue->tail = NULL;
-    hqueue_node_free(head);
+    queue_node_free(head);
     return data;
 }
 
@@ -132,7 +132,7 @@ hqueue_pop(hqueue_t *queue)
  * Get the top item in queue, O(1);
  */
 void *
-hqueue_top(hqueue_t *queue)
+queue_top(queue_t *queue)
 {
     assert(queue != NULL);
 
