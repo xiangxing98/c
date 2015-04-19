@@ -18,8 +18,8 @@
  * Array-based implementation stack.
  */
 
-#ifndef __HSTACK_H
-#define __HSTACK_H
+#ifndef __STK_H
+#define __STK_H
 
 #include <assert.h>
 #include <stdlib.h>
@@ -28,26 +28,26 @@
 extern "C" {
 #endif
 
-#define HSTACK_MAX_SIZE 16 * 1024 * 1024  //16mb
+#define STK_MAX_SIZE 16 * 1024 * 1024  //16mb
 
 typedef enum {
-    HSTACK_OK = 0,
-    HSTACK_ENOMEM = -1,
-} hstack_error_t;
+    STK_OK = 0,
+    STK_ENOMEM = -1,
+} stk_error_t;
 
-typedef struct hstack_st {
+typedef struct stk_st {
     void **data;
     size_t size;
     size_t cap;
-} hstack_t;
+} stk_t;
 
-hstack_t *hstack_new(size_t);
-void hstack_free(hstack_t *);
-void hstack_clear(hstack_t *);
-int hstack_grow(hstack_t *, size_t);
-int hstack_push(hstack_t *, void *);
-void *hstack_pop(hstack_t *);
-void *hstack_top(hstack_t *);
+stk_t *stk_new(size_t);
+void stk_free(stk_t *);
+void stk_clear(stk_t *);
+int stk_grow(stk_t *, size_t);
+int stk_push(stk_t *, void *);
+void *stk_pop(stk_t *);
+void *stk_top(stk_t *);
 
 #ifdef __cplusplus
 }

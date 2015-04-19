@@ -15,22 +15,22 @@
  */
 
 
-#include "hstack.h"
+#include "stack.h"
 
 /**
  * New stack.
  */
-hstack_t *
-hstack_new(size_t size)
+stk_t *
+stk_new(size_t size)
 {
-    hstack_t *stack = malloc(sizeof(hstack_t));
+    stk_t *stack = malloc(sizeof(stk_t));
 
     if (stack != NULL) {
         stack->data = NULL;
         stack->size = 0;
         stack->cap = 0;
         if (size > 0 &&
-                hstack_grow(stack, size) != HSTACK_OK)
+                stk_grow(stack, size) != STK_OK)
             return NULL;
     }
     return stack;
@@ -40,7 +40,7 @@ hstack_new(size_t size)
  * Free stack.
  */
 void
-hstack_free(hstack_t *stack)
+stk_free(stk_t *stack)
 {
     if (stack->data != NULL)
         free(stack->data);
@@ -52,7 +52,7 @@ hstack_free(hstack_t *stack)
  * Clear stack, O(1)
  */
 void
-hstack_clear(hstack_t *stack)
+stk_clear(stk_t *stack)
 {
     assert(stack != NULL);
 
@@ -67,51 +67,51 @@ hstack_clear(hstack_t *stack)
  * Grow stack allocation memory to given size, O(1), O(n)
  */
 int
-hstack_grow(hstack_t *stack, size_t size)
+stk_grow(stk_t *stack, size_t size)
 {
     assert(stack != NULL);
 
-    if (size > HSTACK_MAX_SIZE)
-        return HSTACK_ENOMEM;
+    if (size > STK_MAX_SIZE)
+        return STK_ENOMEM;
 
     if (size <= stack->cap)
-        return HSTACK_OK;
+        return STK_OK;
 
     void **data = realloc(stack->data,
             size * sizeof(void *));
 
     if (data == NULL)
-        return HSTACK_ENOMEM;
+        return STK_ENOMEM;
 
     stack->data = data;
     stack->cap = size;
 
     if (stack->size > size)
         stack->size = size;
-    return HSTACK_OK;
+    return STK_OK;
 }
 
 /**
  * Push an item into stack, O(1), O(n).
  */
 int
-hstack_push(hstack_t *stack, void *item)
+stk_push(stk_t *stack, void *item)
 {
     assert(stack != NULL);
 
     if (stack->size == stack->cap &&
-            hstack_grow(stack, stack->size + 1) != HSTACK_OK)
-        return HSTACK_ENOMEM;
+            stk_grow(stack, stack->size + 1) != STK_OK)
+        return STK_ENOMEM;
 
     stack->data[stack->size++] = item;
-    return HSTACK_OK;
+    return STK_OK;
 }
 
 /**
  * Pop an item from stack, O(1)
  */
 void *
-hstack_pop(hstack_t *stack)
+stk_pop(stk_t *stack)
 {
     assert(stack != NULL);
 
@@ -125,7 +125,7 @@ hstack_pop(hstack_t *stack)
  * Get the top item in stack, O(1).
  */
 void *
-hstack_top(hstack_t *stack)
+stk_top(stk_t *stack)
 {
 
     assert(stack != NULL);

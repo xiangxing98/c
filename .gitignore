@@ -6,7 +6,7 @@
 *.log
 *.dSYM
 t/buf
-t/hstack
+t/stack
 t/queue
 t/list
 t/dict
