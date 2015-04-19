@@ -8,7 +8,7 @@
 t/buf
 t/hstack
 t/hqueue
-t/hlist
+t/list
 t/dict
 t/fs
 t/fs_*

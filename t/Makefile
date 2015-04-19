@@ -1,6 +1,6 @@
 .PHONY: all clean fs
 
-TARGETS := buf dict hlist hqueue hstack fs
+TARGETS := buf dict list hqueue hstack fs
 
 ifeq ($(shell uname), Linux)
 define runtest

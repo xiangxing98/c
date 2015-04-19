@@ -14,15 +14,15 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-#include "hlist.h"
+#include "list.h"
 
 /**
  * New list node.
  */
-hlist_node_t *
-hlist_node_new(void *data)
+list_node_t *
+list_node_new(void *data)
 {
-    hlist_node_t *node = malloc(sizeof(hlist_node_t));
+    list_node_t *node = malloc(sizeof(list_node_t));
 
     if (node != NULL) {
         node->data = data;
@@ -36,7 +36,7 @@ hlist_node_new(void *data)
  * Free list node.
  */
 void
-hlist_node_free(hlist_node_t *node)
+list_node_free(list_node_t *node)
 {
     if (node != NULL)
         free(node);
@@ -45,10 +45,10 @@ hlist_node_free(hlist_node_t *node)
 /**
  * New list.
  */
-hlist_t *
-hlist_new(void)
+list_t *
+list_new(void)
 {
-    hlist_t *list = malloc(sizeof(hlist_t));
+    list_t *list = malloc(sizeof(list_t));
 
     if (list != NULL) {
         list->head = NULL;
@@ -62,10 +62,10 @@ hlist_new(void)
  * Free list.
  */
 void
-hlist_free(hlist_t *list)
+list_free(list_t *list)
 {
     if (list != NULL) {
-        hlist_clear(list);
+        list_clear(list);
         free(list);
     }
 }
@@ -74,24 +74,24 @@ hlist_free(hlist_t *list)
  * Clear list.
  */
 void
-hlist_clear(hlist_t *list)
+list_clear(list_t *list)
 {
     assert(list != NULL);
-    while(hlist_lpop(list) != NULL);
+    while(list_lpop(list) != NULL);
 }
 
 /**
  * Push an item to list on the left end, O(1).
  */
 int
-hlist_lpush(hlist_t *list, void *item)
+list_lpush(list_t *list, void *item)
 {
     assert(list != NULL);
 
-    hlist_node_t *node = hlist_node_new(item);
+    list_node_t *node = list_node_new(item);
 
     if (node == NULL)
-        return HLIST_ENOMEM;
+        return LIST_ENOMEM;
 
     if (list->size == 0) {
         assert(list->head == NULL && list->tail == NULL);
@@ -99,7 +99,7 @@ hlist_lpush(hlist_t *list, void *item)
         list->tail = node;
     } else {
         assert(list->head != NULL && list->tail != NULL);
-        hlist_node_t *head = list->head;
+        list_node_t *head = list->head;
         assert(head->prev == NULL && node->prev == NULL);
         head->prev = node;
         node->next = head;
@@ -107,21 +107,21 @@ hlist_lpush(hlist_t *list, void *item)
     }
 
     list->size += 1;
-    return HLIST_OK;
+    return LIST_OK;
 }
 
 /**
  * Push an item to list on the right end, O(1).
  */
 int
-hlist_rpush(hlist_t *list, void *item)
+list_rpush(list_t *list, void *item)
 {
     assert(list != NULL);
 
-    hlist_node_t *node = hlist_node_new(item);
+    list_node_t *node = list_node_new(item);
 
     if(node == NULL)
-        return HLIST_ENOMEM;
+        return LIST_ENOMEM;
 
     if(list->size == 0) {
         assert(list->head == NULL && list->tail == NULL);
@@ -129,7 +129,7 @@ hlist_rpush(hlist_t *list, void *item)
         list->tail = node;
     } else {
         assert(list->head != NULL && list->tail != NULL);
-        hlist_node_t *tail = list->tail;
+        list_node_t *tail = list->tail;
         assert(tail->next == NULL && node->next == NULL);
         tail->next = node;
         node->prev = tail;
@@ -137,14 +137,14 @@ hlist_rpush(hlist_t *list, void *item)
     }
 
     list->size += 1;
-    return HLIST_OK;
+    return LIST_OK;
 }
 
 /**
  * Pop an item from list on the left end, O(1).
  */
 void *
-hlist_lpop(hlist_t *list)
+list_lpop(list_t *list)
 {
     assert(list != NULL);
 
@@ -155,8 +155,8 @@ hlist_lpop(hlist_t *list)
 
     assert(list->head != NULL && list->tail != NULL);
 
-    hlist_node_t *head = list->head;
-    hlist_node_t *node = head->next;
+    list_node_t *head = list->head;
+    list_node_t *node = head->next;
 
     if (node == NULL) {
         list->tail = NULL;
@@ -168,7 +168,7 @@ hlist_lpop(hlist_t *list)
     list->size -= 1;
 
     void *data = head->data;
-    hlist_node_free(head);
+    list_node_free(head);
     return data;
 }
 
@@ -176,7 +176,7 @@ hlist_lpop(hlist_t *list)
  * Pop an item from list on the right end, O(1).
  */
 void *
-hlist_rpop(hlist_t *list)
+list_rpop(list_t *list)
 {
     assert(list != NULL);
 
@@ -187,8 +187,8 @@ hlist_rpop(hlist_t *list)
 
     assert(list->head != NULL && list->tail != NULL);
 
-    hlist_node_t *tail = list->tail;
-    hlist_node_t *node = tail->prev;
+    list_node_t *tail = list->tail;
+    list_node_t *node = tail->prev;
 
     if (node == NULL) {
         list->head = NULL;
@@ -200,7 +200,7 @@ hlist_rpop(hlist_t *list)
     list->size -= 1;
 
     void *data = tail->data;
-    hlist_node_free(tail);
+    list_node_free(tail);
     return data;
 }
 
@@ -208,7 +208,7 @@ hlist_rpop(hlist_t *list)
  * Get the first item in the list, O(1).
  */
 void *
-hlist_first(hlist_t *list)
+list_first(list_t *list)
 {
     assert(list != NULL);
 
@@ -224,7 +224,7 @@ hlist_first(hlist_t *list)
  * Get the last item in the list, O(1).
  */
 void *
-hlist_last(hlist_t *list)
+list_last(list_t *list)
 {
     assert(list != NULL);
 
@@ -240,7 +240,7 @@ hlist_last(hlist_t *list)
  * Get an item by index, O(n).
  */
 void *
-hlist_get(hlist_t *list, size_t index)
+list_get(list_t *list, size_t index)
 {
     assert(list != NULL);
 
@@ -251,7 +251,7 @@ hlist_get(hlist_t *list, size_t index)
 
     assert(list->head != NULL && list->tail != NULL);
 
-    hlist_node_t *node = list->head;
+    list_node_t *node = list->head;
     size_t idx = 0;
 
     while (node != NULL) {
@@ -268,48 +268,48 @@ hlist_get(hlist_t *list, size_t index)
  * Set an item by index, O(n)
  */
 int
-hlist_set(hlist_t *list, size_t index, void *data)
+list_set(list_t *list, size_t index, void *data)
 {
     assert(list != NULL);
 
     if (list->size == 0) {
         assert(list->head == NULL && list->tail == NULL);
-        return HLIST_EINDEX;
+        return LIST_EINDEX;
     }
 
     assert(list->head != NULL && list->tail != NULL);
 
-    hlist_node_t *node = list->head;
+    list_node_t *node = list->head;
     size_t idx = 0;
 
     while (node != NULL) {
         if (idx++ == index) {
             node->data = data;
-            return HLIST_OK;
+            return LIST_OK;
         }
         node = node->next;
     }
 
-    return HLIST_EINDEX;
+    return LIST_EINDEX;
 }
 
 /**
  * Delete an item by index, O(n)
  */
 int
-hlist_del(hlist_t *list, size_t index)
+list_del(list_t *list, size_t index)
 {
     assert(list != NULL);
 
     if (list->size == 0) {
         assert(list->head == NULL && list->tail == NULL);
-        return HLIST_EINDEX;
+        return LIST_EINDEX;
     }
 
     assert(list->head != NULL && list->tail != NULL);
 
-    hlist_node_t *node = list->head;
-    hlist_node_t *prev, *next;
+    list_node_t *node = list->head;
+    list_node_t *prev, *next;
     size_t idx = 0;
 
     while (node != NULL) {
@@ -325,24 +325,24 @@ hlist_del(hlist_t *list, size_t index)
             else
                 list->tail = prev;
             list->size -= 1;
-            hlist_node_free(node);
-            return HLIST_OK;
+            list_node_free(node);
+            return LIST_OK;
         }
         node = node->next;
     }
 
-    return HLIST_EINDEX;
+    return LIST_EINDEX;
 }
 
 /**
  * New iterator
  */
-hlist_iterator_t *
-hlist_iterator_new(hlist_t *list)
+list_iterator_t *
+list_iterator_new(list_t *list)
 {
     assert(list != NULL);
 
-    hlist_iterator_t *iterator = malloc(sizeof(hlist_iterator_t));
+    list_iterator_t *iterator = malloc(sizeof(list_iterator_t));
 
     if (iterator != NULL) {
         iterator->node = list->head;
@@ -354,7 +354,7 @@ hlist_iterator_new(hlist_t *list)
  * Free iterator.
  */
 void
-hlist_iterator_free(hlist_iterator_t *iterator)
+list_iterator_free(list_iterator_t *iterator)
 {
     if (iterator != NULL)
         free(iterator);
@@ -364,11 +364,11 @@ hlist_iterator_free(hlist_iterator_t *iterator)
  * Get current node's data and seek next, O(1)
  */
 void *
-hlist_iterator_next(hlist_iterator_t *iterator)
+list_iterator_next(list_iterator_t *iterator)
 {
     assert(iterator != NULL);
 
-    hlist_node_t *node = iterator->node;
+    list_node_t *node = iterator->node;
 
     if (node == NULL)
         return NULL;
@@ -381,11 +381,11 @@ hlist_iterator_next(hlist_iterator_t *iterator)
  * Get current node's data and seek prev, O(1)
  */
 void *
-hlist_iterator_prev(hlist_iterator_t *iterator)
+list_iterator_prev(list_iterator_t *iterator)
 {
     assert(iterator != NULL);
 
-    hlist_node_t *node = iterator->node;
+    list_node_t *node = iterator->node;
 
     if (node == NULL)
         return NULL;
@@ -399,7 +399,7 @@ hlist_iterator_prev(hlist_iterator_t *iterator)
  * Seek iterator to a list's head, O(1)
  */
 void
-hlist_iterator_seek_head(hlist_t *list, hlist_iterator_t *iterator)
+list_iterator_seek_head(list_t *list, list_iterator_t *iterator)
 {
     assert(list != NULL && iterator != NULL);
     iterator->node = list->head;
@@ -409,7 +409,7 @@ hlist_iterator_seek_head(hlist_t *list, hlist_iterator_t *iterator)
  * Seek iterator to a list's tail, O(1)
  */
 void
-hlist_iterator_seek_tail(hlist_t *list, hlist_iterator_t *iterator)
+list_iterator_seek_tail(list_t *list, list_iterator_t *iterator)
 {
     assert(list != NULL && iterator != NULL);
     iterator->node = list->tail;
