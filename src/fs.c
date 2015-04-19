@@ -14,13 +14,13 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-#include "hfs.h"
+#include "fs.h"
 
 /**
  * Open a file stream.
  */
-hfs_t *
-hfs_open(const char *path, const char *mode)
+fs_t *
+fs_open(const char *path, const char *mode)
 {
     return fopen(path, mode);
 }
@@ -29,7 +29,7 @@ hfs_open(const char *path, const char *mode)
  * Close a file stream.
  */
 int
-hfs_close(hfs_t *stream)
+fs_close(fs_t *stream)
 {
     return fclose(stream);
 }
@@ -38,44 +38,44 @@ hfs_close(hfs_t *stream)
  * Touch a file.
  */
 int
-hfs_touch(const char *path)
+fs_touch(const char *path)
 {
-    hfs_t *stream = hfs_open(path, "w");
+    fs_t *stream = fs_open(path, "w");
     if (stream == NULL)
-        return HFS_EFILE;
-    return hfs_close(stream);
+        return FS_EFILE;
+    return fs_close(stream);
 }
 
 /**
  * Remove a file.
  */
 int
-hfs_remove(const char *path)
+fs_remove(const char *path)
 {
     if (remove(path) != 0)
-        return HFS_EFILE;
-    return HFS_OK;
+        return FS_EFILE;
+    return FS_OK;
 }
 
 /**
  * Read file into buffer.
  */
 int
-hfs_read(hbuf_t *buf, const char *path, size_t unit)
+fs_read(buf_t *buf, const char *path, size_t unit)
 {
     assert(buf != NULL && path != NULL);
     assert(buf->size <= buf->cap);
 
-    hfs_t *stream = hfs_open(path, "r");
+    fs_t *stream = fs_open(path, "r");
 
     if (stream == NULL)
-        return HFS_EFILE;
+        return FS_EFILE;
 
     int bytes;
 
     while (1) {
-        if (hbuf_grow(buf, buf->size + unit) != HBUF_OK)
-            return HFS_ENOMEM;
+        if (buf_grow(buf, buf->size + unit) != BUF_OK)
+            return FS_ENOMEM;
         bytes = fread(buf->data + buf->size, sizeof(uint8_t),
                 buf->cap - buf->size, stream);
 
@@ -84,52 +84,52 @@ hfs_read(hbuf_t *buf, const char *path, size_t unit)
 
         buf->size += bytes;
     }
-    return hfs_close(stream);
+    return fs_close(stream);
 }
 
 /**
  * Write buffer to file (with mode).
  */
 int
-_hfs_write(const char *path, hbuf_t *buf, const char *mode)
+_fs_write(const char *path, buf_t *buf, const char *mode)
 {
     assert(buf != NULL && path != NULL &&
             strcmp("r", mode) != 0);
 
-    hfs_t *stream = hfs_open(path, mode);
+    fs_t *stream = fs_open(path, mode);
 
     if (stream == NULL)
-        return HFS_EFILE;
+        return FS_EFILE;
 
     if (fwrite(buf->data, sizeof(uint8_t), buf->size, stream) != buf->size)
-        return HFS_EFILE;
+        return FS_EFILE;
 
-    return hfs_close(stream);
+    return fs_close(stream);
 }
 
 /**
  * Write buffer to file (w).
  */
 int
-hfs_write(const char *path, hbuf_t *buf)
+fs_write(const char *path, buf_t *buf)
 {
-    return _hfs_write(path, buf, "w");
+    return _fs_write(path, buf, "w");
 }
 
 /**
  * Append buffer to file (w).
  */
 int
-hfs_append(const char *path, hbuf_t *buf)
+fs_append(const char *path, buf_t *buf)
 {
-    return _hfs_write(path, buf, "a");
+    return _fs_write(path, buf, "a");
 }
 
 /**
  * Test if path exists.
  */
 int
-hfs_exists(const char *path)
+fs_exists(const char *path)
 {
     struct stat st;
     if (stat(path, &st) == 0)
@@ -141,7 +141,7 @@ hfs_exists(const char *path)
  * Test if path is a directory.
  */
 int
-hfs_isdir(const char *path)
+fs_isdir(const char *path)
 {
     struct stat st;
 
@@ -154,7 +154,7 @@ hfs_isdir(const char *path)
  * Test if path is a file.
  */
 int
-hfs_isfile(const char *path)
+fs_isfile(const char *path)
 {
     struct stat st;
 
@@ -167,31 +167,31 @@ hfs_isfile(const char *path)
  * Rename file/directory.
  */
 int
-hfs_rename(const char *old, const char *new)
+fs_rename(const char *old, const char *new)
 {
     if (rename(old, new) != 0)
-        return HFS_EFILE;
-    return HFS_OK;
+        return FS_EFILE;
+    return FS_OK;
 }
 
 /**
  * Make a directory.
  */
 int
-hfs_mkdir(const char *path, mode_t mode)
+fs_mkdir(const char *path, mode_t mode)
 {
     if (mkdir(path, mode) != 0)
-        return HFS_EFILE;
-    return HFS_OK;
+        return FS_EFILE;
+    return FS_OK;
 }
 
 /**
  * Remove a directory.
  */
 int
-hfs_rmdir(const char *path)
+fs_rmdir(const char *path)
 {
     if (rmdir(path) != 0)
-        return HFS_EFILE;
-    return HFS_OK;
+        return FS_EFILE;
+    return FS_OK;
 }

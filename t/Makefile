@@ -1,6 +1,6 @@
-.PHONY: all clean hfs
+.PHONY: all clean fs
 
-TARGETS := buf dict hlist hqueue hstack hfs
+TARGETS := buf dict hlist hqueue hstack fs
 
 ifeq ($(shell uname), Linux)
 define runtest
@@ -27,7 +27,7 @@ clean:
 	$(CC) t_$@.c ../src/$@.c -o $@ $(CFLAGS) -I../src
 	$(call runtest, $@)
 
-hfs: t_hfs.c ../src/hfs.c ../src/hfs.h ../src/buf.c ../src/buf.h \
+fs: t_fs.c ../src/fs.c ../src/fs.h ../src/buf.c ../src/buf.h \
 	../src/bool.h
-	$(CC) t_hfs.c ../src/hfs.c ../src/buf.c -o hfs $(CFLAGS) -I../src
-	$(call runtest, hfs)
+	$(CC) t_fs.c ../src/fs.c ../src/buf.c -o fs $(CFLAGS) -I../src
+	$(call runtest, fs)

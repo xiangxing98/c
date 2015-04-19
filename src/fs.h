@@ -17,12 +17,12 @@
 /**
  * File handling utils.
  *
- * if (hfs_touch(..) == HFS_EFILE)
+ * if (fs_touch(..) == FS_EFILE)
  *   printf("%s", strerror(errno));
  */
 
-#ifndef __HFS_H
-#define __HFS_H
+#ifndef __FS_H
+#define __FS_H
 
 #include <assert.h>
 #include <errno.h>
@@ -30,35 +30,35 @@
 #include <stdlib.h>
 #include <sys/stat.h>
 
-#include "hbuf.h"
-#include "hbool.h"
+#include "buf.h"
+#include "bool.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-typedef FILE hfs_t;
+typedef FILE fs_t;
 
 typedef enum {
-    HFS_OK = 0,
-    HFS_EFILE = 1,
-    HFS_ENOMEM = 2,
-} hfs_error_t;
+    FS_OK = 0,
+    FS_EFILE = 1,
+    FS_ENOMEM = 2,
+} fs_error_t;
 
-hfs_t *hfs_open(const char *, const char *);
-int hfs_close(hfs_t *);
-int hfs_touch(const char *);
-int hfs_remove(const char *);
-int hfs_read(hbuf_t *, const char *, size_t);
-int hfs_write(const char *, hbuf_t *);
-int hfs_append(const char *, hbuf_t *);
-int hfs_exists(const char *);
-int hfs_isdir(const char *);
-int hfs_isfile(const char *);
-int hfs_rename(const char *, const char *);
-int hfs_mkdir(const char *, mode_t);
-int hfs_rmdir(const char *);
-int hfs_readdir(const char *);
+fs_t *fs_open(const char *, const char *);
+int fs_close(fs_t *);
+int fs_touch(const char *);
+int fs_remove(const char *);
+int fs_read(buf_t *, const char *, size_t);
+int fs_write(const char *, buf_t *);
+int fs_append(const char *, buf_t *);
+int fs_exists(const char *);
+int fs_isdir(const char *);
+int fs_isfile(const char *);
+int fs_rename(const char *, const char *);
+int fs_mkdir(const char *, mode_t);
+int fs_rmdir(const char *);
+int fs_readdir(const char *);
 
 #ifdef __cplusplus
 }
