@@ -14,8 +14,8 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-#ifndef __HBOOL_H
-#define __HBOOL_H
+#ifndef __BOOL_H
+#define __BOOL_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -28,7 +28,7 @@ extern "C" {
 typedef enum {
     false = 0,
     true = 1,
-} hbool_t;
+} bool_t;
 #endif
 
 #ifdef __cplusplus
