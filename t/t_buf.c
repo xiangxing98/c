@@ -133,9 +133,9 @@ case_buf_lrm()
 {
     buf_t *buf = buf_new(BUF_UNIT);
     assert(buf_puts(buf, "hihello") == BUF_OK);
-    buf_lrm(buf, 2);
+    assert(buf_lrm(buf, 2) == 2);
     assert(strcmp(buf_str(buf), "hello") == 0);
-    buf_lrm(buf, 100);
+    assert(buf_lrm(buf, 100) == 5);
     assert(strcmp(buf_str(buf), "") == 0);
     buf_free(buf);
 }
@@ -145,9 +145,9 @@ case_buf_rrm()
 {
     buf_t *buf = buf_new(BUF_UNIT);
     assert(buf_puts(buf, "hellohi") == BUF_OK);
-    buf_rrm(buf, 2);
+    assert(buf_rrm(buf, 2) == 2);
     assert(strcmp(buf_str(buf), "hello") == 0);
-    buf_rrm(buf, 100);
+    assert(buf_rrm(buf, 100) == 5);
     assert(strcmp(buf_str(buf), "") == 0);
     buf_free(buf);
 }
