@@ -180,7 +180,6 @@ buf_lrm(buf_t *buf, size_t size)
 {
     assert(buf != NULL && buf->unit != 0);
 
-
     if (size > buf->size) {
         size_t size_ = buf->size;
         buf->size = 0;
@@ -249,4 +248,76 @@ buf_sprintf(buf_t *buf, const char *fmt, ...)
 
     buf->size += num;
     return BUF_OK;
+}
+
+/**
+ * Test if a buf is space. O(n)
+ */
+bool
+buf_isspace(buf_t *buf)
+{
+    assert(buf != NULL);
+
+    size_t idx;
+
+    for (idx = 0; idx < buf->size; idx++)
+        if (!isspace(buf->data[idx]))
+            return false;
+    if (buf->size > 0)
+        return true;
+    return false;
+}
+
+/**
+ * Test if a buf is startswith a prefix.
+ */
+bool
+buf_startswith(buf_t *buf, char *prefix)
+{
+    assert(buf != NULL);
+
+    size_t len = strlen(prefix);
+
+    if (len <= buf->size && strncmp((void *)buf->data, prefix, len) == 0)
+        return true;
+    return false;
+}
+
+/**
+ * Test if a buf is startswith a prefix.
+ */
+bool
+buf_endswith(buf_t *buf, char *suffix)
+{
+    assert(buf != NULL);
+
+    size_t len = strlen(suffix);
+
+    if (len <= buf->size && strncmp(
+                (void *)(buf->data + buf->size - len), suffix, len) == 0)
+        return true;
+    return false;
+}
+
+/**
+ * Reverse buf in place.
+ */
+void
+buf_reverse(buf_t *buf)
+{
+    assert(buf != NULL);
+
+    uint8_t tmp;
+    size_t idx = 0;
+    size_t end = buf->size - 1;
+
+    while (idx < end) {
+        // swap
+        tmp = buf->data[idx];
+        buf->data[idx] = buf->data[end];
+        buf->data[end] = tmp;
+        // move
+        idx ++;
+        end --;
+    }
 }

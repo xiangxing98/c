@@ -23,6 +23,10 @@ void case_buf_puts();
 void case_buf_lrm();
 void case_buf_rrm();
 void case_buf_sprintf();
+void case_buf_isspace();
+void case_buf_startswith();
+void case_buf_endswith();
+void case_buf_reverse();
 
 int main(int argc, const char *argv[])
 {
@@ -40,6 +44,10 @@ int main(int argc, const char *argv[])
     test_case("buf_lrm", &case_buf_lrm);
     test_case("buf_rrm", &case_buf_rrm);
     test_case("buf_sprintf", &case_buf_sprintf);
+    test_case("buf_isspace", &case_buf_isspace);
+    test_case("buf_startswith", &case_buf_startswith);
+    test_case("buf_endswith", &case_buf_endswith);
+    test_case("buf_reverse", &case_buf_reverse);
     return 0;
 }
 
@@ -159,5 +167,56 @@ case_buf_sprintf()
     buf_sprintf(buf, "Hello %s!", "World");
     assert(buf->size == 12);
     assert(strcmp(buf_str(buf), "Hello World!") == 0);
+    buf_free(buf);
+}
+
+void
+case_buf_isspace()
+{
+    buf_t *buf = buf_new(BUF_UNIT);
+    assert(buf_isspace(buf) == false);
+    buf_puts(buf, " \n\t\r\v\f");
+    assert(buf_isspace(buf) == true);
+    buf_putc(buf, 'c');
+    assert(buf_isspace(buf) == false);
+    buf_free(buf);
+}
+
+void
+case_buf_startswith()
+{
+    buf_t *buf = buf_new(BUF_UNIT);
+    assert(buf_startswith(buf, "") == true);
+    buf_puts(buf, "foobar");
+    assert(buf_startswith(buf, "foobar") == true);
+    assert(buf_startswith(buf, "foo") == true);
+    assert(buf_startswith(buf, "foofoo123") == false);
+    buf_free(buf);
+}
+
+void
+case_buf_endswith()
+{
+    buf_t *buf = buf_new(BUF_UNIT);
+    assert(buf_endswith(buf, "") == true);
+    buf_puts(buf, "foobar");
+    assert(buf_endswith(buf, "foobar") == true);
+    assert(buf_endswith(buf, "bar") == true);
+    assert(buf_endswith(buf, "foobar123") == false);
+    buf_free(buf);
+}
+
+void
+case_buf_reverse()
+{
+    buf_t *buf = buf_new(BUF_UNIT);
+    buf_puts(buf, "12345");
+    buf_reverse(buf);
+    assert(strcmp(buf_str(buf), "54321") == 0);
+    buf_clear(buf);
+    buf_puts(buf, "1234");
+    buf_reverse(buf);
+    assert(strcmp(buf_str(buf), "4321") == 0);
+    buf_clear(buf);
     buf_free(buf);
 }

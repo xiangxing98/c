@@ -19,11 +19,14 @@
 #define __BUF_H
 
 #include <assert.h>
+#include <ctype.h>
 #include <stdarg.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
+#include "bool.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -58,6 +61,10 @@ int buf_puts(buf_t *, char *);
 size_t buf_lrm(buf_t *, size_t);
 size_t buf_rrm(buf_t *, size_t);
 int buf_sprintf(buf_t *, const char *, ...);
+bool buf_isspace(buf_t *);
+bool buf_startswith(buf_t *, char *);
+bool buf_endswith(buf_t *, char *);
+void buf_reverse(buf_t *);
 
 #ifdef __cplusplus
 }
