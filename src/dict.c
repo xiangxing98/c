@@ -300,7 +300,7 @@ dict_get(dict_t *dict, uint8_t *key, size_t key_len)
 /**
  * Test if a key is in the dict.
  */
-int
+bool
 dict_has(dict_t *dict, uint8_t *key, size_t key_len)
 {
     assert(dict != NULL);

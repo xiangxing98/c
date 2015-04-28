@@ -128,7 +128,7 @@ fs_append(const char *path, buf_t *buf)
 /**
  * Test if path exists.
  */
-int
+bool
 fs_exists(const char *path)
 {
     struct stat st;
@@ -140,7 +140,7 @@ fs_exists(const char *path)
 /**
  * Test if path is a directory.
  */
-int
+bool
 fs_isdir(const char *path)
 {
     struct stat st;
@@ -153,7 +153,7 @@ fs_isdir(const char *path)
 /**
  * Test if path is a file.
  */
-int
+bool
 fs_isfile(const char *path)
 {
     struct stat st;

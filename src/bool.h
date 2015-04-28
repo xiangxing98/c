@@ -17,9 +17,9 @@
 #ifndef __BOOL_H
 #define __BOOL_H
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+#include <stdint.h>
+
+#if !defined(__cplusplus)
 
 #if __STDC_VERSION__ >= 199901L
 // c99
@@ -29,10 +29,9 @@ typedef enum {
     false = 0,
     true = 1,
 } bool_t;
+typedef bool_t bool;
 #endif
 
-#ifdef __cplusplus
-}
 #endif
 
 #endif

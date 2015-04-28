@@ -63,7 +63,7 @@ void dict_free(dict_t *);
 void dict_clear(dict_t *);
 int dict_set(dict_t *, uint8_t *, size_t, void *);
 void *dict_get(dict_t *, uint8_t *, size_t);
-int dict_has(dict_t *, uint8_t *, size_t);
+bool dict_has(dict_t *, uint8_t *, size_t);
 int dict_del(dict_t *, uint8_t *, size_t);
 size_t dict_size(dict_t *);
 dict_iterator_t *dict_iterator_new(dict_t *);
