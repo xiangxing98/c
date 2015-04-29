@@ -349,7 +349,7 @@ buf_index(buf_t *buf, char *sub)
     for (idx = 0; idx < MAX_UINT8; idx++)
         table[idx] = len;
     for (idx = 0; idx < len; idx++)
-        table[sub[idx]] = last - idx;
+        table[(uint8_t)sub[idx]] = last - idx;
 
     // search
     size_t i, j, k, t, skip;
@@ -359,7 +359,7 @@ buf_index(buf_t *buf, char *sub)
         for (j = 0; j < len; j++) {
             k = last - j;
             if (sub[k] != buf->data[i + k]) {
-                size_t t = table[buf->data[i + k]];
+                t = table[buf->data[i + k]];
                 skip = t > j? t - j : 1;
                 break;
             }
