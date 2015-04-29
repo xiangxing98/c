@@ -27,6 +27,7 @@ void case_buf_isspace();
 void case_buf_startswith();
 void case_buf_endswith();
 void case_buf_reverse();
+void case_buf_index();
 
 int main(int argc, const char *argv[])
 {
@@ -48,6 +49,7 @@ int main(int argc, const char *argv[])
     test_case("buf_startswith", &case_buf_startswith);
     test_case("buf_endswith", &case_buf_endswith);
     test_case("buf_reverse", &case_buf_reverse);
+    test_case("buf_index", &case_buf_index);
     return 0;
 }
 
@@ -217,6 +219,19 @@ case_buf_reverse()
     buf_puts(buf, "1234");
     buf_reverse(buf);
     assert(strcmp(buf_str(buf), "4321") == 0);
-    buf_clear(buf);
+    buf_free(buf);
+}
+
+void
+case_buf_index()
+{
+    buf_t *buf = buf_new(BUF_UNIT);
+    buf_puts(buf, "hello world!");
+    assert(buf_index(buf, "hello") == 0);
+    assert(buf_index(buf, "world") == 6);
+    assert(buf_index(buf, "!") == 11);
+    assert(buf_index(buf, "not exists") == 12);
+    assert(buf_index(buf, "llo ") == 2);
+    assert(buf_index(buf, "lwl") == 12);
     buf_free(buf);
 }

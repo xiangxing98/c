@@ -321,3 +321,43 @@ buf_reverse(buf_t *buf)
         end --;
     }
 }
+
+/**
+ * Search string in buf by Boyer-Moore algorithm.
+ */
+size_t
+buf_index(buf_t *buf, char *sub)
+{
+    assert(buf != NULL);
+
+    size_t len = strlen(sub);
+    size_t last = len - 1;
+    size_t idx;
+
+    size_t table[MAX_UINT8] = {0};
+
+    // build bad char table
+    for (idx = 0; idx < MAX_UINT8; idx++)
+        table[idx] = len;
+    for (idx = 0; idx < len; idx++)
+        table[sub[idx]] = last - idx;
+
+    // search
+    size_t i, j, k, t, skip;
+
+    for (i = 0; i < buf->size; i += skip) {
+        skip = 0;
+        for (j = 0; j < len; j++) {
+            k = last - j;
+            if (sub[k] != buf->data[i + k]) {
+                size_t t = table[buf->data[i + k]];
+                skip = t > j? t - j : 1;
+                break;
+            }
+        }
+        if (skip == 0)
+            return i;
+    }
+
+    return buf->size;
+}

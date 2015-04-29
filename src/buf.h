@@ -32,6 +32,7 @@
 extern "C" {
 #endif
 
+#define MAX_UINT8 256
 #define BUF_MAX_SIZE 16 * 1024 * 1024  //16mb
 
 typedef enum {
@@ -65,6 +66,7 @@ bool buf_isspace(buf_t *);
 bool buf_startswith(buf_t *, char *);
 bool buf_endswith(buf_t *, char *);
 void buf_reverse(buf_t *);
+size_t buf_index(buf_t *, char *);
 
 #ifdef __cplusplus
 }
