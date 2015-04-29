@@ -241,19 +241,20 @@ void
 case_buf_index()
 {
     buf_t *buf = buf_new(BUF_UNIT);
+    assert(buf_index(buf, "", 0) == 0);
     buf_puts(buf, "hello world!");
-    assert(buf_index(buf, "hello") == 0);
-    assert(buf_index(buf, "world") == 6);
-    assert(buf_index(buf, "!") == 11);
-    assert(buf_index(buf, "not exists") == 12);
-    assert(buf_index(buf, "llo ") == 2);
-    assert(buf_index(buf, "lwl") == 12);
+    assert(buf_index(buf, "hello", 0) == 0);
+    assert(buf_index(buf, "world", 0) == 6);
+    assert(buf_index(buf, "!", 0) == 11);
+    assert(buf_index(buf, "not exists", 0) == 12);
+    assert(buf_index(buf, "llo ", 0) == 2);
+    assert(buf_index(buf, "lwl", 0) == 12);
     buf_clear(buf);
     buf_puts(buf, "here is a simple example");
-    assert(buf_index(buf, " a ") == 7);
-    assert(buf_index(buf, "example") == 17);
-    assert(buf_index(buf, "simple") == 10);
-    assert(buf_index(buf, "abcd") == buf->size);
-    assert(buf_index(buf, "a very very very very large string") == buf->size);
+    assert(buf_index(buf, " a ", 0) == 7);
+    assert(buf_index(buf, "example", 0) == 17);
+    assert(buf_index(buf, "simple", 0) == 10);
+    assert(buf_index(buf, "abcd", 0) == buf->size);
+    assert(buf_index(buf, "a very very very very large string", 0) == buf->size);
     buf_free(buf);
 }
