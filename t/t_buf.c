@@ -184,6 +184,9 @@ case_buf_cmp()
     assert(buf_cmp(buf, "cdef") == 0);
     assert(buf_cmp(buf, "efgh") < 0);
     assert(buf_cmp(buf, "cdefhk") < 0);
+    buf_clear(buf);
+    buf_puts(buf, "你好");
+    assert(buf_cmp(buf, "你好") == 0);
     buf_free(buf);
 }
 
@@ -256,5 +259,9 @@ case_buf_index()
     assert(buf_index(buf, "simple", 0) == 10);
     assert(buf_index(buf, "abcd", 0) == buf->size);
     assert(buf_index(buf, "a very very very very large string", 0) == buf->size);
+    buf_clear(buf);
+    buf_puts(buf, "我是中文");
+    assert(buf_index(buf, "中文", 0) == 6);
+    assert(buf_index(buf, "搜不到", 0) == 12);
     buf_free(buf);
 }

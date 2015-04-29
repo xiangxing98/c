@@ -358,7 +358,7 @@ buf_index(buf_t *buf, char *sub, size_t start)
         skip = 0;
         for (j = 0; j < len; j++) {
             k = last - j;
-            if (sub[k] != buf->data[i + k]) {
+            if ((uint8_t)sub[k] != buf->data[i + k]) {
                 t = table[buf->data[i + k]];
                 skip = t > j? t - j : 1;
                 break;
