@@ -269,7 +269,7 @@ buf_isspace(buf_t *buf)
 }
 
 /**
- * Test if a buf is startswith a prefix.
+ * Test if a buf is startswith a prefix. O(k)
  */
 bool
 buf_startswith(buf_t *buf, char *prefix)
@@ -284,7 +284,7 @@ buf_startswith(buf_t *buf, char *prefix)
 }
 
 /**
- * Test if a buf is startswith a prefix.
+ * Test if a buf is startswith a prefix. O(k)
  */
 bool
 buf_endswith(buf_t *buf, char *suffix)
@@ -300,7 +300,7 @@ buf_endswith(buf_t *buf, char *suffix)
 }
 
 /**
- * Reverse buf in place.
+ * Reverse buf in place. O(n/2)
  */
 void
 buf_reverse(buf_t *buf)
