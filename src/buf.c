@@ -260,6 +260,17 @@ buf_cmp(buf_t *buf, char *s)
 }
 
 /**
+ * Test if buf eqauals with string. O(n)
+ */
+bool
+buf_equals(buf_t *buf, char *s)
+{
+    if (buf_cmp(buf, s) == 0)
+        return true;
+    return false;
+}
+
+/**
  * Test if a buf is space. O(n)
  */
 bool

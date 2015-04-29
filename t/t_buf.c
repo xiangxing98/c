@@ -104,7 +104,10 @@ case_buf_str()
     buf_t *buf = buf_new(BUF_UNIT);
     char *str = "test_buf_str";
     assert(buf_puts(buf, str) == BUF_OK);
-    assert(strcmp(buf_str(buf), str) == 0);
+    assert(buf_equals(buf, str));
+    buf_clear(buf);
+    assert(buf_puts(buf, "测试中文") == BUF_OK);
+    assert(buf_equals(buf, "测试中文"));
     buf_free(buf);
 }
 
@@ -113,11 +116,15 @@ case_buf_put()
 {
     buf_t *buf1 = buf_new(BUF_UNIT);
     buf_t *buf2 = buf_new(BUF_UNIT);
+    buf_t *buf3 = buf_new(BUF_UNIT);
     char *str = "test_buf_put";
     assert(buf_puts(buf1, str) == BUF_OK);
     assert(buf_put(buf2, buf1->data, buf1->size) == BUF_OK);
-    buf_free(buf1);
+    assert(buf_put(buf3, (uint8_t *)"测试中文", 6) == BUF_OK);
+    assert(buf_equals(buf3, "测试"));
+    buf_free(buf3);
     buf_free(buf2);
+    buf_free(buf1);
 }
 
 void
@@ -126,7 +133,7 @@ case_buf_putc()
     buf_t *buf = buf_new(BUF_UNIT);
     assert(buf_putc(buf, 'c') == BUF_OK);
     assert(buf_putc(buf, 'h') == BUF_OK);
-    assert(strcmp(buf_str(buf), "ch") == 0);
+    assert(buf_equals(buf, "ch"));
     buf_free(buf);
 }
 
@@ -136,7 +143,9 @@ case_buf_puts()
     buf_t *buf = buf_new(BUF_UNIT);
     assert(buf_puts(buf, "hello") == BUF_OK);
     assert(buf_puts(buf, "world") == BUF_OK);
-    assert(strcmp(buf_str(buf), "helloworld") == 0);
+    assert(buf_equals(buf, "helloworld"));
+    assert(buf_puts(buf, "你好世界") == BUF_OK);
+    assert(buf_equals(buf, "helloworld你好世界"));
     buf_free(buf);
 }
 
@@ -146,9 +155,9 @@ case_buf_lrm()
     buf_t *buf = buf_new(BUF_UNIT);
     assert(buf_puts(buf, "hihello") == BUF_OK);
     assert(buf_lrm(buf, 2) == 2);
-    assert(strcmp(buf_str(buf), "hello") == 0);
+    assert(buf_equals(buf, "hello"));
     assert(buf_lrm(buf, 100) == 5);
-    assert(strcmp(buf_str(buf), "") == 0);
+    assert(buf_equals(buf, ""));
     buf_free(buf);
 }
 
@@ -158,9 +167,9 @@ case_buf_rrm()
     buf_t *buf = buf_new(BUF_UNIT);
     assert(buf_puts(buf, "hellohi") == BUF_OK);
     assert(buf_rrm(buf, 2) == 2);
-    assert(strcmp(buf_str(buf), "hello") == 0);
+    assert(buf_equals(buf, "hello"));
     assert(buf_rrm(buf, 100) == 5);
-    assert(strcmp(buf_str(buf), "") == 0);
+    assert(buf_equals(buf, ""));
     buf_free(buf);
 }
 
@@ -170,7 +179,7 @@ case_buf_sprintf()
     buf_t *buf = buf_new(BUF_UNIT);
     buf_sprintf(buf, "Hello %s!", "World");
     assert(buf->size == 12);
-    assert(strcmp(buf_str(buf), "Hello World!") == 0);
+    assert(buf_equals(buf, "Hello World!"));
     buf_free(buf);
 }
 
@@ -184,9 +193,12 @@ case_buf_cmp()
     assert(buf_cmp(buf, "cdef") == 0);
     assert(buf_cmp(buf, "efgh") < 0);
     assert(buf_cmp(buf, "cdefhk") < 0);
+    assert(buf_equals(buf, "cdef"));
     buf_clear(buf);
     buf_puts(buf, "你好");
     assert(buf_cmp(buf, "你好") == 0);
+    assert(buf_equals(buf, "你好"));
+    assert(!buf_equals(buf, "你i好"));
     buf_free(buf);
 }
 
@@ -194,11 +206,11 @@ void
 case_buf_isspace()
 {
     buf_t *buf = buf_new(BUF_UNIT);
-    assert(buf_isspace(buf) == false);
+    assert(!buf_isspace(buf));
     buf_puts(buf, " \n\t\r\v\f");
-    assert(buf_isspace(buf) == true);
+    assert(buf_isspace(buf));
     buf_putc(buf, 'c');
-    assert(buf_isspace(buf) == false);
+    assert(!buf_isspace(buf));
     buf_free(buf);
 }
 
@@ -206,11 +218,14 @@ void
 case_buf_startswith()
 {
     buf_t *buf = buf_new(BUF_UNIT);
-    assert(buf_startswith(buf, "") == true);
+    assert(buf_startswith(buf, ""));
     buf_puts(buf, "foobar");
-    assert(buf_startswith(buf, "foobar") == true);
-    assert(buf_startswith(buf, "foo") == true);
-    assert(buf_startswith(buf, "foofoo123") == false);
+    assert(buf_startswith(buf, "foobar"));
+    assert(buf_startswith(buf, "foo"));
+    assert(!buf_startswith(buf, "foofoo123"));
+    buf_clear(buf);
+    buf_puts(buf, "中文");
+    assert(buf_startswith(buf, "中"));
     buf_free(buf);
 }
 
@@ -218,11 +233,14 @@ void
 case_buf_endswith()
 {
     buf_t *buf = buf_new(BUF_UNIT);
-    assert(buf_endswith(buf, "") == true);
+    assert(buf_endswith(buf, ""));
     buf_puts(buf, "foobar");
-    assert(buf_endswith(buf, "foobar") == true);
-    assert(buf_endswith(buf, "bar") == true);
-    assert(buf_endswith(buf, "foobar123") == false);
+    assert(buf_endswith(buf, "foobar"));
+    assert(buf_endswith(buf, "bar"));
+    assert(!buf_endswith(buf, "foobar123"));
+    buf_clear(buf);
+    buf_puts(buf, "中文");
+    assert(buf_endswith(buf, "文"));
     buf_free(buf);
 }
 
@@ -232,11 +250,15 @@ case_buf_reverse()
     buf_t *buf = buf_new(BUF_UNIT);
     buf_puts(buf, "12345");
     buf_reverse(buf);
-    assert(strcmp(buf_str(buf), "54321") == 0);
+    assert(buf_equals(buf, "54321"));
     buf_clear(buf);
     buf_puts(buf, "1234");
     buf_reverse(buf);
-    assert(strcmp(buf_str(buf), "4321") == 0);
+    assert(buf_equals(buf, "4321"));
+    buf_clear(buf);
+    buf_puts(buf, "中文");
+    buf_reverse(buf);
+    assert(buf_cmp(buf, "文中") != 0);
     buf_free(buf);
 }
 
