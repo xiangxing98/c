@@ -251,6 +251,15 @@ buf_sprintf(buf_t *buf, const char *fmt, ...)
 }
 
 /**
+ * Compare buf with string. O(n)
+ */
+int
+buf_cmp(buf_t *buf, char *s)
+{
+    return strcmp(buf_str(buf), s);
+}
+
+/**
  * Test if a buf is space. O(n)
  */
 bool

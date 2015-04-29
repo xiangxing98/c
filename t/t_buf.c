@@ -23,6 +23,7 @@ void case_buf_puts();
 void case_buf_lrm();
 void case_buf_rrm();
 void case_buf_sprintf();
+void case_buf_cmp();
 void case_buf_isspace();
 void case_buf_startswith();
 void case_buf_endswith();
@@ -45,6 +46,7 @@ int main(int argc, const char *argv[])
     test_case("buf_lrm", &case_buf_lrm);
     test_case("buf_rrm", &case_buf_rrm);
     test_case("buf_sprintf", &case_buf_sprintf);
+    test_case("buf_cmp", &case_buf_cmp);
     test_case("buf_isspace", &case_buf_isspace);
     test_case("buf_startswith", &case_buf_startswith);
     test_case("buf_endswith", &case_buf_endswith);
@@ -173,6 +175,19 @@ case_buf_sprintf()
 }
 
 void
+case_buf_cmp()
+{
+    buf_t *buf = buf_new(BUF_UNIT);
+    assert(buf_cmp(buf, "") == 0);
+    buf_puts(buf, "cdef");
+    assert(buf_cmp(buf, "abc") > 0);
+    assert(buf_cmp(buf, "cdef") == 0);
+    assert(buf_cmp(buf, "efgh") < 0);
+    assert(buf_cmp(buf, "cdefhk") < 0);
+    buf_free(buf);
+}
+
+void
 case_buf_isspace()
 {
     buf_t *buf = buf_new(BUF_UNIT);
@@ -239,5 +254,6 @@ case_buf_index()
     assert(buf_index(buf, "example") == 17);
     assert(buf_index(buf, "simple") == 10);
     assert(buf_index(buf, "abcd") == buf->size);
+    assert(buf_index(buf, "a very very very very large string") == buf->size);
     buf_free(buf);
 }
