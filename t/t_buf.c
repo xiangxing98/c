@@ -220,6 +220,7 @@ case_buf_startswith()
     buf_t *buf = buf_new(BUF_UNIT);
     assert(buf_startswith(buf, ""));
     buf_puts(buf, "foobar");
+    assert(buf_startswith(buf, ""));
     assert(buf_startswith(buf, "foobar"));
     assert(buf_startswith(buf, "foo"));
     assert(!buf_startswith(buf, "foofoo123"));
@@ -235,6 +236,7 @@ case_buf_endswith()
     buf_t *buf = buf_new(BUF_UNIT);
     assert(buf_endswith(buf, ""));
     buf_puts(buf, "foobar");
+    assert(buf_endswith(buf, ""));
     assert(buf_endswith(buf, "foobar"));
     assert(buf_endswith(buf, "bar"));
     assert(!buf_endswith(buf, "foobar123"));
