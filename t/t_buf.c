@@ -227,6 +227,8 @@ case_buf_startswith()
     buf_clear(buf);
     buf_puts(buf, "中文");
     assert(buf_startswith(buf, "中"));
+    char s[2] = {228, 0};
+    assert(buf_startswith(buf, s));
     buf_free(buf);
 }
 
