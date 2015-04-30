@@ -285,5 +285,8 @@ case_buf_index()
     buf_puts(buf, "我是中文");
     assert(buf_index(buf, "中文", 0) == 6);
     assert(buf_index(buf, "搜不到", 0) == 12);
+    buf_clear(buf);
+    buf_puts(buf, "HERE IS A SIMPLE EXAMPLE");
+    assert(buf_index(buf, "EXAMPLE", 0) == 17);
     buf_free(buf);
 }
