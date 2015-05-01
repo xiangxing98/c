@@ -28,7 +28,7 @@ void case_buf_isspace();
 void case_buf_startswith();
 void case_buf_endswith();
 void case_buf_reverse();
-void case_buf_index();
+void case_buf_indexs();
 
 int main(int argc, const char *argv[])
 {
@@ -51,7 +51,7 @@ int main(int argc, const char *argv[])
     test_case("buf_startswith", &case_buf_startswith);
     test_case("buf_endswith", &case_buf_endswith);
     test_case("buf_reverse", &case_buf_reverse);
-    test_case("buf_index", &case_buf_index);
+    test_case("buf_indexs", &case_buf_indexs);
     return 0;
 }
 
@@ -267,30 +267,30 @@ case_buf_reverse()
 }
 
 void
-case_buf_index()
+case_buf_indexs()
 {
     buf_t *buf = buf_new(BUF_UNIT);
-    assert(buf_index(buf, "", 0) == 0);
+    assert(buf_indexs(buf, "", 0) == 0);
     buf_puts(buf, "hello world!");
-    assert(buf_index(buf, "hello", 0) == 0);
-    assert(buf_index(buf, "world", 0) == 6);
-    assert(buf_index(buf, "!", 0) == 11);
-    assert(buf_index(buf, "not exists", 0) == 12);
-    assert(buf_index(buf, "llo ", 0) == 2);
-    assert(buf_index(buf, "lwl", 0) == 12);
+    assert(buf_indexs(buf, "hello", 0) == 0);
+    assert(buf_indexs(buf, "world", 0) == 6);
+    assert(buf_indexs(buf, "!", 0) == 11);
+    assert(buf_indexs(buf, "not exists", 0) == 12);
+    assert(buf_indexs(buf, "llo ", 0) == 2);
+    assert(buf_indexs(buf, "lwl", 0) == 12);
     buf_clear(buf);
     buf_puts(buf, "here is a simple example");
-    assert(buf_index(buf, " a ", 0) == 7);
-    assert(buf_index(buf, "example", 0) == 17);
-    assert(buf_index(buf, "simple", 0) == 10);
-    assert(buf_index(buf, "abcd", 0) == buf->size);
-    assert(buf_index(buf, "a very very very very large string", 0) == buf->size);
+    assert(buf_indexs(buf, " a ", 0) == 7);
+    assert(buf_indexs(buf, "example", 0) == 17);
+    assert(buf_indexs(buf, "simple", 0) == 10);
+    assert(buf_indexs(buf, "abcd", 0) == buf->size);
+    assert(buf_indexs(buf, "a very very very very large string", 0) == buf->size);
     buf_clear(buf);
     buf_puts(buf, "我是中文");
-    assert(buf_index(buf, "中文", 0) == 6);
-    assert(buf_index(buf, "搜不到", 0) == 12);
+    assert(buf_indexs(buf, "中文", 0) == 6);
+    assert(buf_indexs(buf, "搜不到", 0) == 12);
     buf_clear(buf);
     buf_puts(buf, "HERE IS A SIMPLE EXAMPLE");
-    assert(buf_index(buf, "EXAMPLE", 0) == 17);
+    assert(buf_indexs(buf, "EXAMPLE", 0) == 17);
     buf_free(buf);
 }
