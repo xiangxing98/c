@@ -267,6 +267,20 @@ case_buf_reverse()
 }
 
 void
+case_buf_indexc()
+{
+    buf_t *buf = buf_new(BUF_UNIT);
+    assert(buf_indexc(buf, ' ', 0) == 0);
+    buf_puts(buf, "hello world!");
+    assert(buf_indexc(buf, 'h', 0) == 0);
+    assert(buf_indexc(buf, 'z', 0) == 12);
+    buf_clear(buf);
+    buf_puts(buf, "你好");
+    assert(buf_indexc(buf, 228, 0) == 0);
+    buf_free(buf);
+}
+
+void
 case_buf_indexs()
 {
     buf_t *buf = buf_new(BUF_UNIT);
@@ -283,6 +297,7 @@ case_buf_indexs()
     assert(buf_indexs(buf, " a ", 0) == 7);
     assert(buf_indexs(buf, "example", 0) == 17);
     assert(buf_indexs(buf, "simple", 0) == 10);
+    assert(buf_indexs(buf, "simple", 11) == buf->size);
     assert(buf_indexs(buf, "abcd", 0) == buf->size);
     assert(buf_indexs(buf, "a very very very very large string", 0) == buf->size);
     buf_clear(buf);
